@@ -1,0 +1,39 @@
+{
+  "name": "@solidity-utilities/execution-permissions",
+  "version": "0.0.1",
+  "description": "Utility contract for setting/enforcing execution permissions per function",
+  "main": "null",
+  "scripts": {
+    "compile": "truffle compile",
+    "ganache": "ganache",
+    "prepare": "husky install",
+    "size": "truffle run contract-size",
+    "soldocgen": "soldocgen --output gitbook --ignore Migrations.sol docs/ contracts/",
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/solidity-utilities/execution-permissions.git"
+  },
+  "keywords": [
+    "contract",
+    "ethereum",
+    "permission",
+    "solidity",
+    "truffle"
+  ],
+  "author": "S0AndS0",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/solidity-utilities/execution-permissions/issues"
+  },
+  "homepage": "https://github.com/solidity-utilities/execution-permissions#readme",
+  "devDependencies": {
+    "@truffle/hdwallet-provider": "^2.1.1",
+    "ganache": "^7.5.0",
+    "husky": "^8.0.1",
+    "soldocgen": "^0.0.3",
+    "truffle": "^5.6.4",
+    "truffle-contract-size": "^2.0.1"
+  }
+}

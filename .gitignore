@@ -1,0 +1,11 @@
+## Development
+dev
+
+## Node/NPM
+node_modules*
+
+## Truffle
+build
+
+## Vim
+*.swp
