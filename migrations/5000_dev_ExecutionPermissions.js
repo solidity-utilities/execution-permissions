@@ -11,7 +11,9 @@ module.exports = (deployer, network, accounts) => {
 
   const ExecutionPermissions = artifacts.require("ExecutionPermissions");
 
-  const parameters = {};
+  const parameters = {
+    // owner: accounts[0],
+  };
 
   deployer.deploy(ExecutionPermissions, ...Object.values(parameters));
 };
