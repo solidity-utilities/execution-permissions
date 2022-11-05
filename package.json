@@ -35,5 +35,8 @@
     "soldocgen": "^0.0.3",
     "truffle": "^5.6.4",
     "truffle-contract-size": "^2.0.1"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.7.3"
   }
 }
