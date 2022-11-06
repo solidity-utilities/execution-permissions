@@ -32,7 +32,7 @@ contract Test_ExecutionPermissions__ExampleUsage {
         example.setRegistered(true);
 
         bytes4[] memory targets = new bytes4[](1);
-        targets[0] = bytes4(keccak256(bytes("exampleOnlyPermitted(uint256)")));
+        targets[0] = bytes4(keccak256(bytes("setScore(uint256)")));
 
         address caller = address(this);
 
@@ -42,28 +42,28 @@ contract Test_ExecutionPermissions__ExampleUsage {
     }
 
     //
-    function test_exampleOnlyPermitted() public {
+    function test_setScore() public {
         example.setRegistered(true);
 
         bytes4[] memory targets = new bytes4[](1);
-        targets[0] = bytes4(keccak256(bytes("exampleOnlyPermitted(uint256)")));
+        targets[0] = bytes4(keccak256(bytes("setScore(uint256)")));
 
         address caller = address(this);
 
         example.setTargetsPermission(targets, caller, true);
 
         uint256 value = 42;
-        example.exampleOnlyPermitted(value);
+        example.setScore(value);
 
         Assert.equal(example.account_score(address(this)), value, "WAT");
     }
 
     //
-    function test_exampleOnlyPermitted__error() public {
+    function test_setScore__error() public {
         example.setRegistered(true);
 
         uint256 value = 42;
-        try example.exampleOnlyPermitted(value) {
+        try example.setScore(value) {
             Assert.isTrue(false, "Failed to catch expected error");
         } catch Error(string memory _reason) {
             Assert.equal(

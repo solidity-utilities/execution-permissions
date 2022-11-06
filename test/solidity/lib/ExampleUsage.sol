@@ -10,23 +10,25 @@ contract ExampleUsage is Ownable {
 
     mapping(address => uint256) public account_score;
 
+    //
     constructor(address permissionStore_) Ownable() {
         _permissionStore = permissionStore_;
     }
 
     //
-    function exampleOnlyPermitted(uint256 value) external payable {
-        bytes4 selector = bytes4(
-            keccak256(bytes("exampleOnlyPermitted(uint256)"))
+    modifier onlyPermitted() {
+        require(
+            IExecutionPermissions(_permissionStore).isPermitted(
+                bytes4(msg.data),
+                msg.sender
+            ),
+            "ExampleUsage: sender not permitted"
         );
+        _;
+    }
 
-        bool permitted = IExecutionPermissions(_permissionStore).isPermitted(
-            selector,
-            msg.sender
-        );
-
-        require(permitted, "ExampleUsage: sender not permitted");
-
+    //
+    function setScore(uint256 value) external payable onlyPermitted {
         account_score[msg.sender] = value;
     }
 
