@@ -1,13 +1,31 @@
+"use strict";
+
 const ExecutionPermissions = artifacts.require("ExecutionPermissions");
 
-/*
- * uncomment accounts to access the test accounts made available by the
- * Ethereum client
- * See docs: https://www.trufflesuite.com/docs/truffle/testing/writing-tests-in-javascript
- */
-contract("ExecutionPermissions", function (/* accounts */) {
-  it("should assert true", async function () {
-    await ExecutionPermissions.deployed();
-    return assert.isTrue(true);
+const {
+  revertToSnapShot,
+  takeSnapShot,
+} = require("./lib/web3-ganache-helpers.js");
+
+//
+contract("ExecutionPermissions.constructor", (accounts) => {
+  const owner = accounts[0];
+
+  let snapshot_id;
+
+  //
+  beforeEach(async () => {
+    snapshot_id = (await takeSnapShot()).result;
+  });
+
+  //
+  afterEach(async () => {
+    await revertToSnapShot(snapshot_id);
+  });
+
+  it("Gets expected owner", async () => {
+    const instance = await ExecutionPermissions.deployed();
+    const response = await instance.owner();
+    return assert.equal(response, owner, "Failed to get expected owner");
   });
 });
