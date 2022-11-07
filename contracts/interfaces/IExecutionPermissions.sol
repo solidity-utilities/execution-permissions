@@ -1,6 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0
 pragma solidity >=0.4.22 <0.9.0;
 
+struct BatchPermissionEntry {
+    bytes4 target;
+    address caller;
+    bool state;
+}
+
 /// @author S0AndS0
 interface IExecutionPermissions {
     /*************************************************************************/
@@ -24,14 +30,22 @@ interface IExecutionPermissions {
     /*************************************************************************/
 
     //
-    function setRegistered(bool state) external payable;
+    function setBatchPermission(BatchPermissionEntry[] memory entries)
+        external
+        payable;
 
     //
-    function setTargetsPermission(
-        bytes4[] memory targets,
+    function setTargetPermission(
+        bytes4 target,
         address caller,
         bool state
     ) external payable;
+
+    //
+    function setRegistered(bool state) external payable;
+
+    //
+    function tip() external payable;
 
     /*************************************************************************/
     /* Administration */

@@ -3,8 +3,10 @@ pragma solidity >=0.4.22 <0.9.0;
 
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 
-import { IExecutionPermissions } from "../../../contracts/interfaces/IExecutionPermissions.sol";
+import { IExecutionPermissions, BatchPermissionEntry } from "../../../contracts/interfaces/IExecutionPermissions.sol";
 
+/// @title Example of how to utilize ExecutionPermissions features
+/// @author S0AndS0
 contract ExampleUsage is Ownable {
     address private _permissionStore;
 
@@ -38,13 +40,23 @@ contract ExampleUsage is Ownable {
     }
 
     //
-    function setTargetsPermission(
-        bytes4[] memory targets,
+    function setBatchPermission(BatchPermissionEntry[] memory entries)
+        external
+        payable
+        virtual
+        onlyOwner
+    {
+        IExecutionPermissions(_permissionStore).setBatchPermission(entries);
+    }
+
+    //
+    function setTargetPermission(
+        bytes4 target,
         address caller,
         bool state
     ) external payable virtual onlyOwner {
-        IExecutionPermissions(_permissionStore).setTargetsPermission(
-            targets,
+        IExecutionPermissions(_permissionStore).setTargetPermission(
+            target,
             caller,
             state
         );

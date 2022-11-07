@@ -12,16 +12,27 @@ abstract contract AExecutionPermissions {
     mapping(address => bool) private _registered;
 
     /*************************************************************************/
+    /* Modifiers */
+    /*************************************************************************/
+
+    modifier onlyRegistered() {
+        require(
+            _isRegistered(msg.sender),
+            "ExecutionPermissions: instance not registered"
+        );
+        _;
+    }
+
+    /*************************************************************************/
     /* Views */
     /*************************************************************************/
 
     /// @dev See {IExecutionPermissions-isPermitted}
-    function _isPermitted(address sender, bytes4 target, address caller)
-        internal
-        view
-        virtual
-        returns (bool)
-    {
+    function _isPermitted(
+        address sender,
+        bytes4 target,
+        address caller
+    ) internal view virtual returns (bool) {
         return _permissions[sender][target][caller];
     }
 
@@ -39,23 +50,17 @@ abstract contract AExecutionPermissions {
     /* Mutations */
     /*************************************************************************/
 
-    /// @dev See {IExecutionPermissions-setRegistered}
-    function _setRegistered(address account, bool state) internal virtual {
-        _registered[account] = state;
-    }
-
-    /// @dev See {IExecutionPermissions-setTargetsPermission}
-    function _setTargetsPermission(
-        bytes4[] memory targets,
+    /// @dev See {IExecutionPermissions-setTargetPermission}
+    function _setTargetPermission(
+        bytes4 target,
         address caller,
         bool state
     ) internal virtual {
-        uint256 length = targets.length;
-        for (uint256 i; i < length; ) {
-            _permissions[msg.sender][targets[i]][caller] = state;
-            unchecked {
-                ++i;
-            }
-        }
+        _permissions[msg.sender][target][caller] = state;
+    }
+
+    /// @dev See {IExecutionPermissions-setRegistered}
+    function _setRegistered(address account, bool state) internal virtual {
+        _registered[account] = state;
     }
 }
