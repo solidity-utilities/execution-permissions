@@ -30,6 +30,7 @@
   "homepage": "https://github.com/solidity-utilities/execution-permissions#readme",
   "devDependencies": {
     "@truffle/hdwallet-provider": "^2.1.1",
+    "eth-gas-reporter": "^0.2.25",
     "ganache": "^7.5.0",
     "husky": "^8.0.1",
     "soldocgen": "^0.0.3",
