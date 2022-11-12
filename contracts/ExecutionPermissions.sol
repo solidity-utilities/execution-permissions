@@ -43,6 +43,7 @@ contract ExecutionPermissions is IExecutionPermissions_Functions, Ownable {
         view
         virtual
         override
+        onlyRegistered
         returns (bool)
     {
         return permissions[msg.sender][target][caller];
@@ -54,6 +55,7 @@ contract ExecutionPermissions is IExecutionPermissions_Functions, Ownable {
         view
         virtual
         override
+        onlyRegistered
         returns (bool)
     {
         return
