@@ -8,9 +8,9 @@ struct BatchPermissionEntry {
 }
 
 /// @author S0AndS0
-interface IExecutionPermissions {
+interface IExecutionPermissions_Functions {
     /*************************************************************************/
-    /* Views */
+    /* Views on-chain */
     /*************************************************************************/
 
     /// Check execution permissions of target function for given caller
@@ -266,3 +266,21 @@ interface IExecutionPermissions {
     /// @param amount Measured in Wei
     function withdraw(address to, uint256 amount) external payable;
 }
+
+///
+interface IExecutionPermissions_Variables {
+    ///
+    function permissions(
+        address ref,
+        bytes4 target,
+        address caller
+    ) external view returns (bool);
+
+    ///
+    function registered(address ref) external view returns (bool);
+}
+
+interface IExecutionPermissions is
+    IExecutionPermissions_Functions,
+    IExecutionPermissions_Variables
+{}
