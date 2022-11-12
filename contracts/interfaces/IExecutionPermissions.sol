@@ -19,6 +19,8 @@ interface IExecutionPermissions_Functions {
     /// @param target Function ID to check
     /// @param caller Original `msg.sender` of targeted function
     ///
+    /// @custom:throws "ExecutionPermissions: instance not registered"
+    ///
     /// @custom:examples
     ///
     /// ```solidity
@@ -69,6 +71,8 @@ interface IExecutionPermissions_Functions {
     /// @dev Note will cost more gas than `isPermitted(bytes4,address)` due to
     ///      implicit conversion of function signature string to ID
     ///
+    /// @custom:throws "ExecutionPermissions: instance not registered"
+    ///
     /// @custom:examples
     ///
     /// ```solidity
@@ -113,6 +117,8 @@ interface IExecutionPermissions_Functions {
     ///
     /// @dev Note may cost less gas due to fewer initialization transaction
     ///      fees of multiple `setTargetPermission(bytes4,address,bool)` calls
+    ///
+    /// @custom:throws "ExecutionPermissions: instance not registered"
     ///
     /// @custom:examples
     ///
@@ -161,6 +167,8 @@ interface IExecutionPermissions_Functions {
     /// @param target Function ID to set caller permission
     /// @param caller Original `msg.sender` of targeted function
     /// @param state Value to assign for function caller interaction
+    ///
+    /// @custom:throws "ExecutionPermissions: instance not registered"
     ///
     /// @custom:examples
     ///
@@ -217,6 +225,8 @@ interface IExecutionPermissions_Functions {
     ///
     /// @dev Note upgrade `refPermissions` features _should_ consider calling
     ///      this with `false` before calling new reference with `true`
+    ///
+    /// @custom:throws "ExecutionPermissions: instance not initialized"
     ///
     /// @custom:examples
     ///
@@ -398,4 +408,6 @@ interface IExecutionPermissions_Variables {
 interface IExecutionPermissions is
     IExecutionPermissions_Functions,
     IExecutionPermissions_Variables
-{}
+{
+
+}
