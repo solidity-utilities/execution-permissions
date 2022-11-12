@@ -211,7 +211,7 @@ interface IExecutionPermissions_Functions {
         bool state
     ) external payable;
 
-    /// Set registration state for referenced contract instance
+    /// Set registration state for calling contract instance
     ///
     /// @param state Set `true` for registered and `false` for unregistered (default)
     ///
@@ -253,6 +253,15 @@ interface IExecutionPermissions_Functions {
     /// }
     /// ```
     function setRegistered(bool state) external payable;
+
+    /// Set registration state for referenced contract instance
+    ///
+    /// @param state Set `true` for registered and `false` for unregistered (default)
+    ///
+    /// @custom:throws "ExecutionPermissions: instance not initialized"
+    /// @custom:throws "ExecutionPermissions: instance does not implement `.owner()`"
+    /// @custom:throws "ExecutionPermissions: not instance owner"
+    function setRegistered(address ref, bool state) external payable;
 
     /// Show some support developers of this contract
     ///

@@ -105,6 +105,35 @@ contract ExecutionPermissions is IExecutionPermissions_Functions, Ownable {
         registered[msg.sender] = state;
     }
 
+    /// @dev See {IExecutionPermissions_Functions-setRegistered}
+    function setRegistered(address ref, bool state)
+        external
+        payable
+        virtual
+        override
+    {
+        require(
+            ref.code.length > 0,
+            "ExecutionPermissions: instance not initialized"
+        );
+
+        address refOwner;
+        try IOwnable(ref).owner() returns (address result) {
+            refOwner = result;
+        } catch {
+            revert(
+                "ExecutionPermissions: instance does not implement `.owner()`"
+            );
+        }
+
+        require(
+            msg.sender == refOwner,
+            "ExecutionPermissions: not instance owner"
+        );
+
+        registered[ref] = state;
+    }
+
     /// @dev See {IExecutionPermissions_Functions-tip}
     function tip() external payable virtual override {}
 
