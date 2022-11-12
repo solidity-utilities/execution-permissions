@@ -11,10 +11,12 @@ import { IOwnable } from "./interfaces/IOwnable.sol";
 /// @author S0AndS0
 contract ExecutionPermissions is IExecutionPermissions_Functions, Ownable {
     /// Map contract to function target to caller to permission
+    /// @dev See {IExecutionPermissions_Variables-permissions}
     mapping(address => mapping(bytes4 => mapping(address => bool)))
         public permissions;
 
     /// Map contract to registered state
+    /// @dev See {IExecutionPermissions_Variables-registered}
     mapping(address => bool) public registered;
 
     constructor() Ownable() {}
@@ -32,10 +34,10 @@ contract ExecutionPermissions is IExecutionPermissions_Functions, Ownable {
     }
 
     /*************************************************************************/
-    /* Views on-chain */
+    /* Views */
     /*************************************************************************/
 
-    /// @dev See {IExecutionPermissions-isPermitted}
+    /// @dev See {IExecutionPermissions_Functions-isPermitted}
     function isPermitted(bytes4 target, address caller)
         external
         view
@@ -46,7 +48,7 @@ contract ExecutionPermissions is IExecutionPermissions_Functions, Ownable {
         return permissions[msg.sender][target][caller];
     }
 
-    /// @dev See {IExecutionPermissions-isPermitted}
+    /// @dev See {IExecutionPermissions_Functions-isPermitted}
     function isPermitted(string memory target, address caller)
         external
         view
@@ -62,7 +64,7 @@ contract ExecutionPermissions is IExecutionPermissions_Functions, Ownable {
     /* Mutations */
     /*************************************************************************/
 
-    /// @dev See {IExecutionPermissions-setBatchPermission}
+    /// @dev See {IExecutionPermissions_Functions-setBatchPermission}
     function setBatchPermission(BatchPermissionEntry[] memory entries)
         external
         payable
@@ -82,7 +84,7 @@ contract ExecutionPermissions is IExecutionPermissions_Functions, Ownable {
         }
     }
 
-    /// @dev See {IExecutionPermissions-setTargetPermission}
+    /// @dev See {IExecutionPermissions_Functions-setTargetPermission}
     function setTargetPermission(
         bytes4 target,
         address caller,
@@ -91,7 +93,7 @@ contract ExecutionPermissions is IExecutionPermissions_Functions, Ownable {
         permissions[msg.sender][target][caller] = state;
     }
 
-    /// @dev See {IExecutionPermissions-setRegistered}
+    /// @dev See {IExecutionPermissions_Functions-setRegistered}
     function setRegistered(bool state) external payable virtual override {
         require(
             msg.sender.code.length > 0,
@@ -101,14 +103,14 @@ contract ExecutionPermissions is IExecutionPermissions_Functions, Ownable {
         registered[msg.sender] = state;
     }
 
-    /// @dev See {IExecutionPermissions-tip}
+    /// @dev See {IExecutionPermissions_Functions-tip}
     function tip() external payable virtual override {}
 
     /*************************************************************************/
     /* Administration */
     /*************************************************************************/
 
-    /// @dev See {IExecutionPermissions-withdraw}
+    /// @dev See {IExecutionPermissions_Functions-withdraw}
     function withdraw(address to, uint256 amount)
         external
         payable
