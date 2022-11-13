@@ -24,14 +24,14 @@ contract Test_ExecutionPermissions__ExampleUsage {
     }
 
     //
-    function test__setRegistered() public {
+    function test__success__setRegistered() public {
         example.setRegistered(true);
 
-        Assert.isTrue(true, "WAT");
+        Assert.isTrue(permissionStore.registered(address(example)), "Failed to register");
     }
 
     //
-    function test__setBatchPermission__setScore() public {
+    function test__success__setBatchPermission__setScore() public {
         example.setRegistered(true);
 
         BatchPermissionEntry memory entry;
@@ -51,7 +51,7 @@ contract Test_ExecutionPermissions__ExampleUsage {
     }
 
     //
-    function test__setTargetPermission__setScore() public {
+    function test__success__setTargetPermission__setScore() public {
         example.setRegistered(true);
 
         bytes4 target = bytes4(keccak256(bytes("setScore(uint256)")));
@@ -67,7 +67,7 @@ contract Test_ExecutionPermissions__ExampleUsage {
     }
 
     //
-    function test__setScore__error() public {
+    function test__error__permission__setScore() public {
         example.setRegistered(true);
 
         uint256 value = 42;
@@ -77,6 +77,64 @@ contract Test_ExecutionPermissions__ExampleUsage {
             Assert.equal(
                 _reason,
                 "ExampleUsage: sender not permitted",
+                "Caught unexpected error reason"
+            );
+        }
+    }
+
+    //
+    function test__error__registration__setScore() public {
+        example.setRegistered(false);
+
+        uint256 value = 42;
+        try example.setScore(value) {
+            Assert.isTrue(false, "Failed to catch expected error");
+        } catch Error(string memory _reason) {
+            Assert.equal(
+                _reason,
+                "ExecutionPermissions: instance not registered",
+                "Caught unexpected error reason"
+            );
+        }
+    }
+
+    //
+    function test__error__setBatchPermission__not_registered() public {
+        example.setRegistered(false);
+
+        BatchPermissionEntry memory entry;
+        entry.target = bytes4(keccak256(bytes("setScore(uint256)")));
+        entry.caller = address(this);
+        entry.state = true;
+
+        BatchPermissionEntry[] memory entries = new BatchPermissionEntry[](1);
+        entries[0] = entry;
+
+        try example.setBatchPermission(entries) {
+            Assert.isTrue(false, "Failed to catch expected error");
+        } catch Error(string memory _reason) {
+            Assert.equal(
+                _reason,
+                "ExecutionPermissions: instance not registered",
+                "Caught unexpected error reason"
+            );
+        }
+    }
+
+    //
+    function test__error__setTargetPermission__not_registered() public {
+        example.setRegistered(false);
+
+        bytes4 target = bytes4(keccak256(bytes("setScore(uint256)")));
+        address caller = address(this);
+        bool state = true;
+
+        try example.setTargetPermission(target, caller, state) {
+            Assert.isTrue(false, "Failed to catch expected error");
+        } catch Error(string memory _reason) {
+            Assert.equal(
+                _reason,
+                "ExecutionPermissions: instance not registered",
                 "Caught unexpected error reason"
             );
         }
