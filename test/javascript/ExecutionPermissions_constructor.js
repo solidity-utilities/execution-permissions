@@ -10,12 +10,14 @@ const {
 //
 contract("ExecutionPermissions.constructor", (accounts) => {
   const owner = accounts[0];
+  const contracts = {};
 
   let snapshot_id;
 
   //
   beforeEach(async () => {
     snapshot_id = (await takeSnapShot()).result;
+    contracts.ExecutionPermissions = await ExecutionPermissions.deployed();
   });
 
   //
@@ -24,8 +26,7 @@ contract("ExecutionPermissions.constructor", (accounts) => {
   });
 
   it("Gets expected owner", async () => {
-    const instance = await ExecutionPermissions.deployed();
-    const response = await instance.owner();
+    const response = await contracts.ExecutionPermissions.owner();
     return assert.equal(response, owner, "Failed to get expected owner");
   });
 });
