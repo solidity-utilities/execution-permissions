@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0
 pragma solidity >=0.4.22 <0.9.0;
 
+/// @custom:property target Function ID to check
+/// @custom:property caller Original `msg.sender` of targeted function
+/// @custom:property state Value to assign for function caller interaction
 struct BatchPermissionEntry {
     bytes4 target;
     address caller;
@@ -266,6 +269,7 @@ interface IExecutionPermissions_Functions {
 
     /// Set registration state for referenced contract instance
     ///
+    /// @param ref Contract instance owned by `msg.sender`
     /// @param state Set `true` for registered and `false` for unregistered (default)
     ///
     /// @custom:throws "ExecutionPermissions: instance not initialized"
@@ -359,6 +363,8 @@ interface IExecutionPermissions_Variables {
     ) external view returns (bool);
 
     /// Check registration status of referenced contract
+    ///
+    /// @param ref Contract address to check registration state
     ///
     /// @dev See (IExecutionPermissions)
     ///
