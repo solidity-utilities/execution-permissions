@@ -8,7 +8,6 @@
     "ganache": "ganache",
     "prepare": "husky install",
     "size": "truffle run contract-size",
-    "soldocgen": "soldocgen --output gitbook --ignore Migrations.sol docs/ contracts/",
     "test": "truffle test"
   },
   "repository": {
@@ -28,12 +27,15 @@
     "url": "https://github.com/solidity-utilities/execution-permissions/issues"
   },
   "homepage": "https://github.com/solidity-utilities/execution-permissions#readme",
+  "engines": {
+    "npm": "8.11.0",
+    "node": "18.3.0"
+  },
   "devDependencies": {
     "@truffle/hdwallet-provider": "^2.1.1",
     "eth-gas-reporter": "^0.2.25",
     "ganache": "^7.5.0",
     "husky": "^8.0.1",
-    "soldocgen": "^0.0.3",
     "truffle": "^5.6.4",
     "truffle-contract-size": "^2.0.1"
   },
