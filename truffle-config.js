@@ -122,14 +122,15 @@ module.exports = {
   },
 
   // Set default mocha options here, use special reporters etc.
-	mocha: {
-		reporter: 'eth-gas-reporter',
-		reporterOptions: {
-			coinmarketcap: process.env.API_COIN_MARKET_CAP,
-			showTimeSpent: true,
-			showMethodSig: true,
-		},
-	},
+  mocha: {
+    reporter: "eth-gas-reporter",
+    reporterOptions: {
+      coinmarketcap: process.env.API_COIN_MARKET_CAP,
+      showTimeSpent: true,
+      showMethodSig: true,
+      excludeContracts: ["Migrations"],
+    },
+  },
 
   // Configure your compilers
   compilers: {
