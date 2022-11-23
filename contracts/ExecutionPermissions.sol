@@ -1,15 +1,21 @@
 // SPDX-License-Identifier: AGPL-3.0
 pragma solidity >=0.4.22 <0.9.0;
 
-import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
-
-import { IExecutionPermissions_Functions, BatchPermissionEntry } from "./interfaces/IExecutionPermissions.sol";
+/* prettier-ignore */
+import {
+    IExecutionPermissions_Events,
+    IExecutionPermissions_Functions,
+    BatchPermissionEntry
+} from "./interfaces/IExecutionPermissions.sol";
 
 import { IOwnable } from "./interfaces/IOwnable.sol";
 
 /// @title Utility contract for setting/enforcing execution permissions per function
 /// @author S0AndS0
-contract ExecutionPermissions is IExecutionPermissions_Functions, Ownable {
+contract ExecutionPermissions is
+    IExecutionPermissions_Events,
+    IExecutionPermissions_Functions
+{
     /// Map contract to function target to caller to permission
     /// @dev See {IExecutionPermissions_Variables-permissions}
     mapping(address => mapping(bytes4 => mapping(address => bool)))
@@ -19,7 +25,17 @@ contract ExecutionPermissions is IExecutionPermissions_Functions, Ownable {
     /// @dev See {IExecutionPermissions_Variables-registered}
     mapping(address => bool) public registered;
 
-    constructor() Ownable() {}
+    ///
+    address public owner;
+
+    ///
+    address public nominated_owner;
+
+    ///
+    constructor() {
+        owner = msg.sender;
+        emit OwnershipClaimed(address(0), msg.sender);
+    }
 
     /*************************************************************************/
     /* Modifiers */
@@ -30,6 +46,11 @@ contract ExecutionPermissions is IExecutionPermissions_Functions, Ownable {
             registered[msg.sender],
             "ExecutionPermissions: instance not registered"
         );
+        _;
+    }
+
+    modifier onlyOwner() {
+        require(owner == msg.sender, "ExecutionPermissions: caller not owner");
         _;
     }
 
@@ -151,5 +172,34 @@ contract ExecutionPermissions is IExecutionPermissions_Functions, Ownable {
     {
         (bool success, ) = to.call{ value: amount }("");
         require(success, "ExecutionPermissions: transfer failed");
+    }
+
+    /// @dev See {IExecutionPermissions_Functions-nominateOwner}
+    function nominateOwner(address newOwner)
+        external
+        payable
+        virtual
+        override
+        onlyOwner
+    {
+        require(
+            newOwner != address(0),
+            "ExecutionPermissions: new owner cannot be zero address"
+        );
+
+        nominated_owner = newOwner;
+        emit OwnerNominated(owner, newOwner);
+    }
+
+    /// @dev See {IExecutionPermissions_Functions-claimOwnership}
+    function claimOwnership() external payable virtual override {
+        require(
+            nominated_owner == msg.sender,
+            "ExecutionPermissions: new owner cannot be zero address"
+        );
+
+        address previousOwner = owner;
+        owner = msg.sender;
+        emit OwnershipClaimed(previousOwner, msg.sender);
     }
 }

@@ -11,7 +11,17 @@ struct BatchPermissionEntry {
 }
 
 /// @title Describe available functions
-/// @author S0AndS0
+/// @dev See {IExecutionPermissions}
+interface IExecutionPermissions_Events {
+    ///
+    event OwnerNominated(address indexed from, address indexed to);
+
+    ///
+    event OwnershipClaimed(address indexed from, address indexed to);
+}
+
+/// @title Describe available functions
+/// @dev See {IExecutionPermissions}
 interface IExecutionPermissions_Functions {
     /*************************************************************************/
     /* Views on-chain */
@@ -316,10 +326,16 @@ interface IExecutionPermissions_Functions {
     /// @param to Where to send Ethereum
     /// @param amount Measured in Wei
     function withdraw(address to, uint256 amount) external payable;
+
+    ///
+    function nominateOwner(address newOwner) external payable;
+
+    ///
+    function claimOwnership() external payable;
 }
 
 /// @title Describe public storage getter functions
-/// @author S0AndS0
+/// @dev See {IExecutionPermissions}
 interface IExecutionPermissions_Variables {
     /// Check execution permissions of referenced contract function for given caller
     ///
@@ -412,6 +428,7 @@ interface IExecutionPermissions_Variables {
 /// const ExecutionPermissions = new web3.eth.Contract(abi, ADDRESS);
 /// ```
 interface IExecutionPermissions is
+    IExecutionPermissions_Events,
     IExecutionPermissions_Functions,
     IExecutionPermissions_Variables
 {
