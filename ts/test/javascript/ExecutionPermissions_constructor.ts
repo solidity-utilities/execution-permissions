@@ -1,32 +1,35 @@
-"use strict";
+'use strict';
 
-const ExecutionPermissions = artifacts.require("ExecutionPermissions");
+const ExecutionPermissions = artifacts.require('ExecutionPermissions');
 
-const {
-  revertToSnapShot,
-  takeSnapShot,
-} = require("./lib/web3-ganache-helpers.js");
+import { revertToSnapShot, takeSnapShot } from './lib/web3-ganache-helpers';
+import { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers';
+
+import { ExecutionPermissionsInstance } from '../../../@types/truffle-v5/ExecutionPermissions';
 
 //
-contract("ExecutionPermissions.constructor", (accounts) => {
-  const owner = accounts[0];
-  const contracts = {};
+contract('ExecutionPermissions.constructor', (accounts) => {
+	const owner = accounts[0];
 
-  let snapshot_id;
+	const contracts = {} as {
+		ExecutionPermissions: ExecutionPermissionsInstance;
+	};
 
-  //
-  beforeEach(async () => {
-    snapshot_id = (await takeSnapShot()).result;
-    contracts.ExecutionPermissions = await ExecutionPermissions.deployed();
-  });
+	let snapshot_id: JsonRpcResponse['id'];
 
-  //
-  afterEach(async () => {
-    await revertToSnapShot(snapshot_id);
-  });
+	//
+	beforeEach(async () => {
+		snapshot_id = ((await takeSnapShot()) as JsonRpcResponse).result;
+		contracts.ExecutionPermissions = await ExecutionPermissions.deployed();
+	});
 
-  it("Gets expected owner", async () => {
-    const response = await contracts.ExecutionPermissions.owner();
-    return assert.equal(response, owner, "Failed to get expected owner");
-  });
+	//
+	afterEach(async () => {
+		await revertToSnapShot(snapshot_id);
+	});
+
+	it('Gets expected owner', async () => {
+		const response = await contracts.ExecutionPermissions.owner();
+		return assert.equal(response, owner, 'Failed to get expected owner');
+	});
 });
