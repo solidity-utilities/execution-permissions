@@ -78,8 +78,10 @@ function revertToSnapShot(id: JsonRpcPayload['id']): Promise<JsonRpcResponse | u
 	});
 }
 
-module.exports = {
+exports = module.exports = {
 	promisedWeb3Send,
 	takeSnapShot,
 	revertToSnapShot,
 };
+
+export { promisedWeb3Send, takeSnapShot, revertToSnapShot };
