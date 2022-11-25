@@ -1,9 +1,11 @@
+// vim: noexpandtab
 'use strict';
 
 const ExecutionPermissions = artifacts.require('ExecutionPermissions');
 
 import { revertToSnapShot, takeSnapShot } from './lib/web3-ganache-helpers';
-import { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers';
+
+import { JsonRpcResponse } from 'web3-core-helpers';
 
 import { ExecutionPermissionsInstance } from '../../../@types/truffle-v5/ExecutionPermissions';
 
