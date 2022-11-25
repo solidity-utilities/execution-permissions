@@ -3,4 +3,6 @@
 # shellcheck source=.husky/_/husky.sh
 source "$(dirname "$0")/_/husky.sh"
 
-npm test
+npm run typechain:all &&
+  npm run ts-build &&
+  npm test
