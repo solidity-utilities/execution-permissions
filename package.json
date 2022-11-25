@@ -3,12 +3,23 @@
   "version": "0.0.1",
   "description": "Utility contract for setting/enforcing execution permissions per function",
   "main": "null",
+  "type": "commonjs",
   "scripts": {
     "compile": "truffle compile",
     "ganache": "ganache",
     "prepare": "husky install",
+    "postinstall": "postinstall",
     "size": "truffle run contract-size",
-    "test": "truffle test"
+    "test": "truffle test",
+    "typechain:all": "npm run typechain:ethers && npm run typechain:truffle && npm run typechain:web3",
+    "typechain:ethers": "npm run typechain:ethers-v5",
+    "typechain:ethers-v5": "typechain --target ethers-v5 --out-dir @types/ethers-v5 build/contracts/*.json",
+    "typechain:truffle": "npm run typechain:truffle-v5",
+    "typechain:truffle-v5": "typechain --target truffle-v5 --out-dir @types/truffle-v5 build/contracts/*.json",
+    "typechain:web3": "npm run typechain:web3-v1",
+    "typechain:web3-v1": "typechain --target web3-v1 --out-dir @types/web3-v1 build/contracts/*.json",
+    "ts-build": "tsc --build",
+    "ts-watch": "tsc --watch"
   },
   "repository": {
     "type": "git",
@@ -31,13 +42,29 @@
     "npm": "8.11.0",
     "node": "18.3.0"
   },
+  "postinstall": {
+    "compile": "npm run compile",
+    "typechain": "npm run typechain:all"
+  },
   "devDependencies": {
     "@openzeppelin/contracts": "^4.7.3",
     "@truffle/hdwallet-provider": "^2.1.1",
+    "@typechain/ethers-v5": "^10.1.1",
+    "@typechain/truffle-v5": "^8.0.2",
+    "@typechain/web3-v1": "^6.0.2",
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "^10.0.0",
+    "@types/web3": "^1.2.2",
     "eth-gas-reporter": "^0.2.25",
     "ganache": "^7.5.0",
     "husky": "^8.0.1",
+    "keyv": "^4.5.2",
     "truffle": "^5.6.4",
-    "truffle-contract-size": "^2.0.1"
+    "truffle-contract-size": "^2.0.1",
+    "typechain": "^8.1.1",
+    "typescript": "^4.9.3"
+  },
+  "dependencies": {
+    "postinstall": "^0.8.0"
   }
 }
