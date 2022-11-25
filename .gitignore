@@ -15,8 +15,10 @@ build
 
 ## TypeScript
 *.js.map
-test/javascript
+js-lib
 migrations/**/*.js
+test/javascript
+truffle-config.js
 
 ## Vim
 *.swp
