@@ -1,5 +1,9 @@
-const Migrations = artifacts.require("Migrations");
+// vim: noexpandtab
+/// <reference types="../../@types/truffle-v5/types" />
+'use strict';
 
-module.exports = function (deployer) {
-  deployer.deploy(Migrations);
+const Migrations = artifacts.require('Migrations');
+
+module.exports = function (deployer: Truffle.Deployer) {
+	deployer.deploy(Migrations);
 };
