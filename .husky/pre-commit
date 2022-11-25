@@ -1,8 +1,78 @@
 #!/usr/bin/env bash
+# vim: noexpandtab
 
 # shellcheck source=.husky/_/husky.sh
 source "$(dirname "$0")/_/husky.sh"
 
-npm run typechain:all &&
-  npm run ts-build &&
-  npm test
+set -eET
+
+if ! ((${#GIT_INDEX_FILE})); then
+	printf >&2 -- 'Undefined environment variable -> GIT_INDEX_FILE\n'
+	exit 1
+fi
+
+##
+# Format debugging messages if `VERBOSE` environment variable is set
+__debug__() {
+	local _message="${1}"
+	local _caller="${FUNCNAME[1]}"
+	if ((VERBOSE)); then
+		printf >&2 '%s: %s\n' "${_caller}" "${_message}"
+	fi
+}
+
+mapfile -t _staged_paths < <(git diff-index --cached --name-only HEAD)
+if ! ((${#_staged_paths[@]})); then
+	exit 0
+fi
+
+##
+# Note: order is important!
+_command_list__available=(
+	'npm run compile'
+	'npm run typechain:all'
+	'npm run ts-build'
+	'npm test'
+)
+
+##
+# Utilize associative array as tricky truth table
+# Warning: requires Bash version 4 or greater
+declare -A _command_list__to_run=()
+for _command in "${_command_list__available[@]}"; do
+	_command_list__to_run["${_command}"]=0
+done
+
+##
+# Commands to run when '@types' hints change
+if printf -- '%s\0' "${_staged_paths[@]}" | grep -qEz -- '^@types/'; then
+	__debug__ 'Detected changes in -> @types'
+	_command_list__to_run['npm run ts-build']+=1
+	_command_list__to_run['npm test']+=1
+fi
+
+##
+# Commands to run when 'contracts' change
+if printf -- '%s\0' "${_staged_paths[@]}" | grep -qEz -- '^contracts/'; then
+	__debug__ 'Detected changes in -> contracts'
+	_command_list__to_run['npm run compile']+=1
+	_command_list__to_run['npm run typechain:all']+=1
+	_command_list__to_run['npm test']+=1
+fi
+
+##
+# Commands to run when 'ts' scripts change
+if printf -- '%s\0' "${_staged_paths[@]}" | grep -qEz -- '^ts/'; then
+	__debug__ 'Detected changes in -> ts'
+	_command_list__to_run['npm run ts-build']+=1
+	_command_list__to_run['npm test']+=1
+fi
+
+##
+# Run only command keys with positive value
+for _command in "${!_command_list__to_run[@]}"; do
+	if ((${_command_list__to_run["${_command}"]})); then
+		__debug__ "Running -> ${_command}"
+		${_command}
+	fi
+done
