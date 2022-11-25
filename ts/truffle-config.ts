@@ -161,7 +161,10 @@ module.exports = {
 					//     "userdoc",
 					//   ],
 					// },
-					'contracts/StringStorage.sol': {
+					'contracts/ExecutePermissions.sol': {
+						'*': ['devdoc', 'userdoc'],
+					},
+					'contracts/interfaces/IExecutionPermissions.sol': {
 						'*': ['devdoc', 'userdoc'],
 					},
 				},
