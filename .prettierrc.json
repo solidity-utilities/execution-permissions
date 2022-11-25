@@ -1,0 +1,32 @@
+{
+	"trailingComma": "es5",
+	"printWidth": 100,
+	"useTabs": true,
+	"tabWidth": 2,
+	"semi": true,
+	"singleQuote": true,
+	"bracketSpacing": true,
+	"arrowParens": "always",
+	"overrides": [
+		{
+			"comments": {
+				"tabs-or-spaces": "https://docs.soliditylang.org/en/latest/style-guide.html#tabs-or-spaces"
+			},
+			"files": ["**/*.sol"],
+			"options": {
+				"singleQuote": false,
+				"tabWidth": 4,
+				"useTabs": false,
+				"printWidth": 119
+			}
+		},
+		{
+			"files": ["**/*.sh"],
+			"options": {
+				"tabWidth": 2,
+				"useTabs": true,
+				"printWidth": 79
+			}
+		}
+	]
+}
