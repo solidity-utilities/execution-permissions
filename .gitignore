@@ -16,6 +16,7 @@ build
 ## TypeScript
 *.js.map
 test/javascript
+migrations/**/*.js
 
 ## Vim
 *.swp
