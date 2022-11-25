@@ -10,10 +10,11 @@
 		"lib": ["ES2018", "DOM"],
 		"module": "commonjs",
 		"moduleResolution": "node",
+		"resolveJsonModule": true,
 		"sourceMap": true,
 		"strict": true,
 		"target": "ES2018"
 	},
 	"include": ["@types/**/*.d.ts", "ts/**/*.ts"],
-  "exclude": ["node_modules"]
+	"exclude": ["node_modules"]
 }
