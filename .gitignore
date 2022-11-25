@@ -7,5 +7,14 @@ node_modules*
 ## Truffle
 build
 
+## TypeChain
+@types/ethers-v5
+@types/truffle-v5
+@types/web3-v1
+
+## TypeScript
+*.js.map
+test/javascript
+
 ## Vim
 *.swp
