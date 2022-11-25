@@ -1,0 +1,19 @@
+{
+	"comments": {
+		"TypeChain--Truffle-Example": "https://github.com/dethcrypto/TypeChain/tree/master/examples/truffle-v5"
+	},
+	"compilerOptions": {
+		"rootDir": "./ts",
+		"outDir": "",
+		"esModuleInterop": true,
+		"incremental": true,
+		"lib": ["ES2018", "DOM"],
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"sourceMap": true,
+		"strict": true,
+		"target": "ES2018"
+	},
+	"include": ["@types/**/*.d.ts", "ts/**/*.ts"],
+  "exclude": ["node_modules"]
+}
