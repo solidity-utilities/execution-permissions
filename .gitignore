@@ -1,5 +1,6 @@
 ## Development
 dev
+*.bak
 
 ## Node/NPM
 node_modules*

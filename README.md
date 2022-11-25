@@ -656,6 +656,8 @@ ______
 
 - [GitHub -- `github-utilities/make-readme`](https://github.com/github-utilities/make-readme)
 
+- [GitHub -- `dethcrypto/TypeChain`](https://github.com/dethcrypto/TypeChain)
+
 
 ______
 
