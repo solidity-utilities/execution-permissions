@@ -1,204 +1,156 @@
-"use strict";
+// vim: noexpandtab
+'use strict';
 
-const ExecutionPermissions = artifacts.require("ExecutionPermissions");
+const ExecutionPermissions = artifacts.require('ExecutionPermissions');
 
-const {
-  revertToSnapShot,
-  takeSnapShot,
-} = require("./lib/web3-ganache-helpers.js");
+import { revertToSnapShot, takeSnapShot } from './lib/web3-ganache-helpers';
 
-/**
- * @callback Described_Tests
- * @param {string[]} accounts
- */
+import { JsonRpcResponse } from 'web3-core-helpers';
 
-/**
- * @typedef Contract_Base
- * @type {Object}
- * @property {string} address - Public key of published contract
- */
+import { Extended_Types } from '../../../@types/index';
+import { ExecutionPermissionsInstance } from '../../../@types/truffle-v5/ExecutionPermissions';
 
-/**
- * Wrapper for interacting with contract instance
- * @typedef ExecutionPermissions
- * @type {Contract_Base}
- */
+//
+contract('ExecutionPermissions.tip and ExecutionPermissions.withdraw', (accounts) => {
+	const owner = accounts[0];
+	const tipper = accounts[1];
+	const recipient = accounts[2];
+	const bad_actor = accounts.at(-1);
 
-/**
- * @typedef Contracts
- * @property {ExecutionPermissions} ExecutionPermissions
- */
+	const contracts = {} as {
+		ExecutionPermissions: ExecutionPermissionsInstance;
+	};
 
-/**
- * @function Described_Contract
- * @param {string} title
- * @param {Described_Tests} tests
- */
-contract(
-  "ExecutionPermissions.tip and ExecutionPermissions.withdraw",
+	let snapshot_id: JsonRpcResponse['id'];
 
-  /**
-   * @type Described_Tests
-   */
-  (accounts) => {
-    const owner = accounts[0];
-    const tipper = accounts[1];
-    const recipient = accounts[2];
-    const bad_actor = accounts.at(-1);
+	//
+	beforeEach(async () => {
+		snapshot_id = ((await takeSnapShot()) as JsonRpcResponse).result;
+		contracts.ExecutionPermissions = await ExecutionPermissions.deployed();
+	});
 
-    /**
-     * @type Contracts
-     */
-    const contracts = {};
+	//
+	afterEach(async () => {
+		await revertToSnapShot(snapshot_id);
+	});
 
-    let snapshot_id;
+	//
+	it('`.tip` -- Allowed from anyone', async () => {
+		const balances = {
+			contract: {
+				before: NaN,
+				after: NaN,
+			},
+		} as {
+			contract: {
+				before: number | string;
+				after: number | string;
+			};
+		};
 
-    //
-    beforeEach(async () => {
-      snapshot_id = (await takeSnapShot()).result;
-      contracts.ExecutionPermissions = await ExecutionPermissions.deployed();
-    });
+		balances.contract.before = await web3.eth.getBalance(contracts.ExecutionPermissions.address);
 
-    //
-    afterEach(async () => {
-      await revertToSnapShot(snapshot_id);
-    });
+		const tx_options = {
+			from: tipper,
+			value: web3.utils.toWei('0.01', 'ether'),
+		};
 
-    //
-    it("`.tip` -- Allowed from anyone", async () => {
-      const balances = {
-        contract: {
-          before: NaN,
-          after: NaN,
-        },
-      };
+		await contracts.ExecutionPermissions.tip(tx_options);
 
-      balances.contract.before = await web3.eth.getBalance(
-        contracts.ExecutionPermissions.address
-      );
+		balances.contract.after = await web3.eth.getBalance(contracts.ExecutionPermissions.address);
 
-      const tx_options = {
-        from: tipper,
-        value: web3.utils.toWei("0.01", "ether"),
-      };
+		assert.equal(balances.contract.after, tx_options.value, 'Failed to tip');
+	});
 
-      await contracts.ExecutionPermissions.tip(tx_options);
+	//
+	it('`.withdraw(to,amount)` -- Allowed from owner', async () => {
+		const balances = {
+			contract: {
+				before: NaN,
+				after: NaN,
+			},
+			recipient: {
+				before: NaN,
+				after: NaN,
+			},
+		} as {
+			contract: {
+				before: number | string;
+				after: number | string;
+			};
+			recipient: {
+				before: number | string;
+				after: number | string;
+			};
+		};
 
-      balances.contract.after = await web3.eth.getBalance(
-        contracts.ExecutionPermissions.address
-      );
+		const value = web3.utils.toWei('0.01', 'ether');
 
-      assert.equal(balances.contract.after, tx_options.value, "Failed to tip");
-    });
+		//
+		{
+			balances.contract.before = await web3.eth.getBalance(contracts.ExecutionPermissions.address);
 
-    //
-    it("`.withdraw(to,amount)` -- Allowed from owner", async () => {
-      const balances = {
-        contract: {
-          before: NaN,
-          after: NaN,
-        },
-        recipient: {
-          before: NaN,
-          after: NaN,
-        },
-      };
+			const tx_options = {
+				from: tipper,
+				value,
+			};
 
-      const value = web3.utils.toWei("0.01", "ether");
+			await contracts.ExecutionPermissions.tip(tx_options);
 
-      //
-      {
-        balances.contract.before = await web3.eth.getBalance(
-          contracts.ExecutionPermissions.address
-        );
+			balances.contract.after = await web3.eth.getBalance(contracts.ExecutionPermissions.address);
 
-        const tx_options = {
-          from: tipper,
-          value,
-        };
+			assert.equal(balances.contract.after, tx_options.value, 'Failed to tip');
+		}
 
-        await contracts.ExecutionPermissions.tip(tx_options);
+		//
+		{
+			balances.recipient.before = await web3.eth.getBalance(recipient);
 
-        balances.contract.after = await web3.eth.getBalance(
-          contracts.ExecutionPermissions.address
-        );
+			balances.contract.before = await web3.eth.getBalance(contracts.ExecutionPermissions.address);
 
-        assert.equal(
-          balances.contract.after,
-          tx_options.value,
-          "Failed to tip"
-        );
-      }
+			const tx_options = { from: owner };
+			await contracts.ExecutionPermissions.withdraw(recipient, value, tx_options);
 
-      //
-      {
-        balances.recipient.before = await web3.eth.getBalance(recipient);
+			balances.recipient.after = await web3.eth.getBalance(recipient);
 
-        balances.contract.before = await web3.eth.getBalance(
-          contracts.ExecutionPermissions.address
-        );
+			balances.contract.after = await web3.eth.getBalance(contracts.ExecutionPermissions.address);
 
-        const parameters = {
-          to: recipient,
-          amount: value,
-        };
+			assert.notEqual(
+				balances.contract.before,
+				balances.contract.after,
+				'Failed to reduce contract balance'
+			);
 
-        const tx_options = { from: owner };
-        await contracts.ExecutionPermissions.withdraw(
-          ...Object.values(parameters),
-          tx_options
-        );
+			// assert.notEqual(
+			//   balances.recipient.before,
+			//   balances.recipient.after,
+			//   "Failed to increase recipient balance"
+			// );
+		}
+	});
 
-        balances.recipient.after = await web3.eth.getBalance(recipient);
+	//
+	it('`.withdraw(to,amount)` -- Rejects non-contract owner', async () => {
+		const expected = 'ExecutionPermissions: caller not owner';
 
-        balances.contract.after = await web3.eth.getBalance(
-          contracts.ExecutionPermissions.address
-        );
+		let caught_error;
+		try {
+			const tx_options = { from: bad_actor };
 
-        assert.notEqual(
-          balances.contract.before,
-          balances.contract.after,
-          "Failed to reduce contract balance"
-        );
+			await contracts.ExecutionPermissions.withdraw(recipient, '1', tx_options);
+		} catch (revert) {
+			if ((revert as Extended_Types.Truffle.Revert).reason !== expected) {
+				console.error(revert);
+			}
 
-        // assert.notEqual(
-        //   balances.recipient.before,
-        //   balances.recipient.after,
-        //   "Failed to increase recipient balance"
-        // );
-      }
-    });
+			assert.equal(
+				(revert as Extended_Types.Truffle.Revert).reason,
+				expected,
+				'Failed to catch expected `revert.reason`'
+			);
+			caught_error = true;
+		}
 
-    //
-    it("`.withdraw(to,amount)` -- Rejects non-contract owner", async () => {
-      const expected = "ExecutionPermissions: caller not owner";
-
-      let caught_error;
-      try {
-        const parameters = {
-          to: recipient,
-          amount: '1',
-        };
-
-        const tx_options = { from: bad_actor };
-
-        await contracts.ExecutionPermissions.withdraw(
-          ...Object.values(parameters),
-          tx_options
-        );
-      } catch (revert) {
-        if (revert.reason !== expected) {
-          console.error(revert);
-        }
-        assert.equal(
-          revert.reason,
-          expected,
-          "Failed to catch expected `revert.reason`"
-        );
-        caught_error = true;
-      }
-
-      assert.equal(caught_error, true, "Failed to catch any error");
-    });
-  }
-);
+		assert.equal(caught_error, true, 'Failed to catch any error');
+	});
+});
