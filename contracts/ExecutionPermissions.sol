@@ -196,7 +196,7 @@ contract ExecutionPermissions is
     /// @dev See {IExecutionPermissions_Functions-claimOwnership}
     function claimOwnership() external payable virtual override {
         require(
-            nominated_owner == msg.sender,
+            nominated_owner != address(0),
             "ExecutionPermissions: new owner cannot be zero address"
         );
 
