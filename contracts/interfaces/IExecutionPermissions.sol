@@ -353,6 +353,9 @@ interface IExecutionPermissions_Functions {
     ///
     /// @dev See {IExecutionPermissions}
     ///
+    /// @custom:throws "ExecutionPermissions: caller not owner"
+    /// @custom:throws "ExecutionPermissions: transfer failed"
+    ///
     /// @custom:examples
     ///
     /// ### Node Web3JS transfer contract balance to owner
@@ -387,6 +390,7 @@ interface IExecutionPermissions_Functions {
     /// @dev See {IExecutionPermissions}
     /// @dev See {IExecutionPermissions_Events-OwnerNominated}
     ///
+    /// @custom:throws "ExecutionPermissions: caller not owner"
     /// @custom:throws "ExecutionPermissions: new owner cannot be zero address"
     ///
     /// @custom:examples
