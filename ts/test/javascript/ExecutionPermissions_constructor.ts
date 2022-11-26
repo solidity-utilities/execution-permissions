@@ -7,14 +7,14 @@ import { revertToSnapShot, takeSnapShot } from './lib/web3-ganache-helpers';
 
 import { JsonRpcResponse } from 'web3-core-helpers';
 
-import { ExecutionPermissionsInstance } from '../../../@types/truffle-v5/ExecutionPermissions';
+import { IExecutionPermissionsInstance } from '../../../@types/truffle-v5/';
 
 //
 contract('ExecutionPermissions.constructor', (accounts) => {
 	const owner = accounts[0];
 
 	const contracts = {} as {
-		ExecutionPermissions: ExecutionPermissionsInstance;
+		ExecutionPermissions: IExecutionPermissionsInstance;
 	};
 
 	let snapshot_id: JsonRpcResponse['id'];

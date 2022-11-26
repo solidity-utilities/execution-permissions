@@ -8,7 +8,7 @@ import { revertToSnapShot, takeSnapShot } from './lib/web3-ganache-helpers';
 import { JsonRpcResponse } from 'web3-core-helpers';
 
 import { Extended_Types } from '../../../@types/index';
-import { ExecutionPermissionsInstance } from '../../../@types/truffle-v5/ExecutionPermissions';
+import { IExecutionPermissionsInstance } from '../../../@types/truffle-v5/';
 
 type Storage_Stub = {
 	owner?: string;
@@ -23,7 +23,7 @@ contract('ExecutionPermissions.tip and ExecutionPermissions.withdraw', (accounts
 	const zero_address = `0x${'0'.repeat(40)}`;
 
 	const contracts = {} as {
-		ExecutionPermissions: ExecutionPermissionsInstance;
+		ExecutionPermissions: IExecutionPermissionsInstance;
 	};
 
 	let snapshot_id: JsonRpcResponse['id'];

@@ -10,7 +10,7 @@ import { revertToSnapShot, takeSnapShot } from './lib/web3-ganache-helpers';
 import { JsonRpcResponse } from 'web3-core-helpers';
 
 import { Extended_Types } from '../../../@types/index';
-import { ExecutionPermissionsInstance } from '../../../@types/truffle-v5/ExecutionPermissions';
+import { IExecutionPermissionsInstance } from '../../../@types/truffle-v5/';
 import { ExampleUsageInstance } from '../../../@types/truffle-v5/ExampleUsage';
 import { NotOwnableInstance } from '../../../@types/truffle-v5/NotOwnable';
 
@@ -19,7 +19,7 @@ contract('ExecutionPermissions.setRegistered -- Success', (accounts) => {
 	const owner = accounts[0];
 
 	const contracts = {} as {
-		ExecutionPermissions: ExecutionPermissionsInstance;
+		ExecutionPermissions: IExecutionPermissionsInstance;
 		ExampleUsage: ExampleUsageInstance;
 		NotOwnable: NotOwnableInstance;
 	};
@@ -106,7 +106,7 @@ contract('ExecutionPermissions.setRegistered -- Error', (accounts) => {
 	const owner = accounts[0];
 
 	const contracts = {} as {
-		ExecutionPermissions: ExecutionPermissionsInstance;
+		ExecutionPermissions: IExecutionPermissionsInstance;
 		ExampleUsage: ExampleUsageInstance;
 		NotOwnable: NotOwnableInstance;
 	};
