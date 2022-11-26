@@ -13,10 +13,16 @@ struct BatchPermissionEntry {
 /// @title Describe available functions
 /// @dev See {IExecutionPermissions}
 interface IExecutionPermissions_Events {
+    /// Log attempt to transfer ownership of contract instance
     ///
+    /// @param from Current owner of contract
+    /// @param to Address of possible new contract owner
     event OwnerNominated(address indexed from, address indexed to);
 
+    /// Log ownership transfer completion
     ///
+    /// @param from Previous owner of contract
+    /// @param to New owner of contract
     event OwnershipClaimed(address indexed from, address indexed to);
 }
 
@@ -298,21 +304,18 @@ interface IExecutionPermissions_Functions {
     /// ```javascript
     /// const { PRIVATE_KEY } = process.env;
     ///
-    /// function tipAuthor({ ExecutionPermissions, sendOptions } = {}) {
-    ///   sendOptions = Object.assign({ value: web3.utils.toWei("0.1") }, sendOptions);
-    ///   return ExecutionPermissions.methods.tip().send(sendOptions);
-    /// }
-    ///
     /// if (PRIVATE_KEY) {
-    ///   tipAuthor({
-    ///     ExecutionPermissions,
-    ///     sendOptions: {
-    ///       from: web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY).address,
-    ///       value: web3.utils.toWei("0.1") },
-    ///     },
-    ///   }).then((receipt) => {
-    ///     console.log("tipAuthor ->", JSON.stringify({ receipt }, null, 2));
-    ///   });
+    ///   const account = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
+    ///
+    ///   ExecutionPermissions
+    ///     .methods
+    ///     .tip()
+    ///     .send({
+    ///       from: account.address,
+    ///       value: web3.utils.toWei("0.1"),
+    ///     }).then((receipt) => {
+    ///       console.log("tip ->", JSON.stringify({ receipt }, null, 2));
+    ///     });
     /// }
     /// ```
     function tip() external payable;
@@ -325,12 +328,96 @@ interface IExecutionPermissions_Functions {
     ///
     /// @param to Where to send Ethereum
     /// @param amount Measured in Wei
+    ///
+    /// @dev See {IExecutionPermissions}
+    ///
+    /// @custom:examples
+    ///
+    /// ### Node Web3JS transfer contract balance to owner
+    ///
+    /// ```javascript
+    /// const { PRIVATE_KEY } = process.env;
+    ///
+    /// if (PRIVATE_KEY) {
+    ///   const account = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
+    ///
+    ///   web3.eth.getBalance(ExecutionPermissions.address).then((balance) => {
+    ///     const parameters = {
+    ///       to: account.address,
+    ///       amount: balance,
+    ///     };
+    ///
+    ///     return ExecutionPermissions
+    ///       .methods
+    ///       .withdraw(...Object.values(parameters))
+    ///       .send({ from: account.address });
+    ///   }).then((receipt) => {
+    ///     console.log("withdraw ->", JSON.stringify({ receipt }, null, 2));
+    ///   });
+    /// }
+    /// ```
     function withdraw(address to, uint256 amount) external payable;
 
+    /// Initiate transfer of contract ownership
     ///
+    /// @param newOwner Account that may claim ownership of contract
+    ///
+    /// @dev See {IExecutionPermissions}
+    /// @dev See {IExecutionPermissions_Events-OwnerNominated}
+    ///
+    /// @custom:throws "ExecutionPermissions: new owner cannot be zero address"
+    ///
+    /// @custom:examples
+    ///
+    /// ### Node Web3JS nominate new owner
+    ///
+    /// ```javascript
+    /// const { PRIVATE_KEY } = process.env;
+    /// const { NEW_OWNER_ADDRESS } = process.env;
+    ///
+    /// if (PRIVATE_KEY && NEW_OWNER_ADDRESS) {
+    ///   const account = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
+    ///
+    ///   web3.eth.getBalance(ExecutionPermissions.address).then((balance) => {
+    ///     return ExecutionPermissions
+    ///       .methods
+    ///       .nominateOwner(NEW_OWNER_ADDRESS)
+    ///       .send({ from: account.address });
+    ///   }).then((receipt) => {
+    ///     console.log("nominateOwner ->", JSON.stringify({ receipt }, null, 2));
+    ///   });
+    /// }
+    /// ```
     function nominateOwner(address newOwner) external payable;
 
+    /// Accept transfer of contract ownership
     ///
+    /// @dev See {IExecutionPermissions}
+    /// @dev See {IExecutionPermissions_Events-OwnershipClaimed}
+    ///
+    /// @custom:throws "ExecutionPermissions: new owner cannot be zero address"
+    /// @custom:throws "ExecutionPermissions: sender not nominated"
+    ///
+    /// @custom:examples
+    ///
+    /// ### Node Web3JS assume ownership of contract
+    ///
+    /// ```javascript
+    /// const { PRIVATE_KEY } = process.env;
+    ///
+    /// if (PRIVATE_KEY) {
+    ///   const account = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
+    ///
+    ///   web3.eth.getBalance(ExecutionPermissions.address).then((balance) => {
+    ///     return ExecutionPermissions
+    ///       .methods
+    ///       .claimOwnership()
+    ///       .send({ from: account.address });
+    ///   }).then((receipt) => {
+    ///     console.log("claimOwnership ->", JSON.stringify({ receipt }, null, 2));
+    ///   });
+    /// }
+    /// ```
     function claimOwnership() external payable;
 }
 
