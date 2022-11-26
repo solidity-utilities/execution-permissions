@@ -12,12 +12,12 @@ contract ExampleUsage is Ownable {
 
     mapping(address => uint256) public account_score;
 
-    //
+    // Store referenced to `ExecutionPermissions` contract
     constructor(address permissionStore_) Ownable() {
         _permissionStore = permissionStore_;
     }
 
-    //
+    // Restrict execution to only permitted callers
     modifier onlyPermitted() {
         require(
             IExecutionPermissions(_permissionStore).isPermitted(
@@ -29,17 +29,17 @@ contract ExampleUsage is Ownable {
         _;
     }
 
-    //
+    // Example of restricted function
     function setScore(uint256 value) external payable onlyPermitted {
         account_score[msg.sender] = value;
     }
 
-    //
+    // Allow only contract owner to modify own registration state
     function setRegistered(bool state) external payable virtual onlyOwner {
         IExecutionPermissions(_permissionStore).setRegistered(state);
     }
 
-    //
+    // Allow only contract owner to modify permissions
     function setBatchPermission(BatchPermissionEntry[] memory entries)
         external
         payable
@@ -49,7 +49,7 @@ contract ExampleUsage is Ownable {
         IExecutionPermissions(_permissionStore).setBatchPermission(entries);
     }
 
-    //
+    // Allow only contract owner to modify permissions
     function setTargetPermission(
         bytes4 target,
         address caller,
