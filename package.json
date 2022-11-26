@@ -10,6 +10,7 @@
     "postinstall": "postinstall",
     "test": "truffle test",
     "truffle:compile": "truffle compile",
+    "truffle:migrate:development": "truffle migrate --network development",
     "truffle:size": "truffle run contract-size",
     "typechain:all": "npm run typechain:ethers && npm run typechain:truffle && npm run typechain:web3",
     "typechain:ethers": "npm run typechain:ethers-v5",
