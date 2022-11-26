@@ -295,7 +295,7 @@ interface IExecutionPermissions_Functions {
 
     /// Show some support developers of this contract
     ///
-    /// @dev See (IExecutionPermissions)
+    /// @dev See {IExecutionPermissions}
     ///
     /// @custom:examples
     ///
@@ -426,7 +426,7 @@ interface IExecutionPermissions_Functions {
 interface IExecutionPermissions_Variables {
     /// Check execution permissions of referenced contract function for given caller
     ///
-    /// @dev See (IExecutionPermissions)
+    /// @dev See {IExecutionPermissions}
     ///
     /// @param ref Contract address with `target` function
     /// @param target Function ID to check
@@ -469,7 +469,7 @@ interface IExecutionPermissions_Variables {
     ///
     /// @param ref Contract address to check registration state
     ///
-    /// @dev See (IExecutionPermissions)
+    /// @dev See {IExecutionPermissions}
     ///
     /// @custom:examples
     ///
