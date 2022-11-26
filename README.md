@@ -758,90 +758,90 @@ For further details review full length version of [AGPL-3.0][branch__current__li
 
 
 [source__contracts__executionpermissions_sol__isPermitted__bytes4_address]:
-  contracts/ExecutionPermissions.sol#L40
+  contracts/ExecutionPermissions.sol#L65
   "Insert `address` into `mapping` of `authorized` data structure"
 
 [source__contracts__iexecutionpermissions_sol__isPermitted__bytes4_address]:
-  contracts/interfaces/IExecutionPermissions.sol#L20
+  contracts/interfaces/IExecutionPermissions.sol#L36
   "Insert `address` into `mapping` of `authorized` data structure"
 
 
 [source__contracts__executionpermissions_sol__isPermitted__string_address]:
-  contracts/ExecutionPermissions.sol#L52
+  contracts/ExecutionPermissions.sol#L78
   "Insert `address` into `mapping` of `authorized` data structure"
 
 [source__contracts__iexecutionpermissions_sol__isPermitted__string_address]:
-  contracts/interfaces/IExecutionPermissions.sol#L69
+  contracts/interfaces/IExecutionPermissions.sol#L85
   "Insert `address` into `mapping` of `authorized` data structure"
 
 
 [source__contracts__executionpermissions_sol__setBatchPermission__BatchPermissionEntry]:
-  contracts/ExecutionPermissions.sol#L69
+  contracts/ExecutionPermissions.sol#L96
   "Assign multiple permission entries in one transaction"
 
 [source__contracts__iexecutionpermissions_sol__setBatchPermission__BatchPermissionEntry]:
-  contracts/interfaces/IExecutionPermissions.sol#L117
+  contracts/interfaces/IExecutionPermissions.sol#L133
   "Assign multiple permission entries in one transaction"
 
 
 [source__contracts__executionpermissions_sol__setTargetPermission__bytes4_address_bool]:
-  contracts/ExecutionPermissions.sol#L69
+  contracts/ExecutionPermissions.sol#L117
   "Assign single function caller permission state"
 
 [source__contracts__iexecutionpermissions_sol__setTargetPermission__bytes4_address_bool]:
-  contracts/interfaces/IExecutionPermissions.sol#L117
+  contracts/interfaces/IExecutionPermissions.sol#L184
   "Assign single function caller permission state"
 
 
 [source__contracts__executionpermissions_sol__setRegistered__bool]:
-  contracts/ExecutionPermissions.sol#L98
+  contracts/ExecutionPermissions.sol#L127
   "Set registration state for calling contract instance"
 
 [source__contracts__iexecutionpermissions_sol__setRegistered__bool]:
-  contracts/interfaces/IExecutionPermissions.sol#L225
+  contracts/interfaces/IExecutionPermissions.sol#L241
   "Set registration state for calling contract instance"
 
 
 [source__contracts__executionpermissions_sol__setRegistered__address_bool]:
-  contracts/ExecutionPermissions.sol#L108
+  contracts/ExecutionPermissions.sol#L138
   "Set registration state for referenced contract instance"
 
 [source__contracts__iexecutionpermissions_sol__setRegistered__address_bool]:
-  contracts/interfaces/IExecutionPermissions.sol#L270
+  contracts/interfaces/IExecutionPermissions.sol#L286
   "Set registration state for referenced contract instance"
 
 
 [source__contracts__executionpermissions_sol__tip]:
-  contracts/ExecutionPermissions.sol#L137
+  contracts/ExecutionPermissions.sol#L168
   "Show some support developers of this contract"
 
 [source__contracts__iexecutionpermissions_sol__tip]:
-  contracts/interfaces/IExecutionPermissions.sol#L280
+  contracts/interfaces/IExecutionPermissions.sol#L318
   "Show some support developers of this contract"
 
 
 [source__contracts__executionpermissions_sol__withdraw__address_uint256]:
-  contracts/ExecutionPermissions.sol#L144
+  contracts/ExecutionPermissions.sol#L176
   "Allow owner of `ExecutionPermissions` to receive tips"
 
 [source__contracts__iexecutionpermissions_sol__withdraw__address_uint256]:
-  contracts/interfaces/IExecutionPermissions.sol#L314
+  contracts/interfaces/IExecutionPermissions.sol#L349
   "Allow owner of `ExecutionPermissions` to receive tips"
 
 
 [source__contracts__executionpermissions_sol__permissions__address_bytes4_address]:
-  contracts/ExecutionPermissions.sol#L13
+  contracts/ExecutionPermissions.sol#L21
   "Check execution permissions of referenced contract function for given caller"
 
 [source__contracts__iexecutionpermissions_sol__permissions__address_bytes4_address]:
-  contracts/interfaces/IExecutionPermissions.sol#L324
+  contracts/interfaces/IExecutionPermissions.sol#L449
   "Check execution permissions of referenced contract function for given caller"
 
 
 [source__contracts__executionpermissions_sol__registered__address_bool]:
-  contracts/ExecutionPermissions.sol#L20
+  contracts/ExecutionPermissions.sol#L26
   "Check registration status of referenced contract"
 
 [source__contracts__iexecutionpermissions_sol__registered__address_bool]:
-  contracts/interfaces/IExecutionPermissions.sol#L365
+  contracts/interfaces/IExecutionPermissions.sol#L490
   "Check registration status of referenced contract"
