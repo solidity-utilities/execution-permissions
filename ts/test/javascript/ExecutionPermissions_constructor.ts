@@ -30,6 +30,7 @@ contract('ExecutionPermissions.constructor', (accounts) => {
 		await revertToSnapShot(snapshot_id);
 	});
 
+	//
 	it('Gets expected owner', async () => {
 		const response = await contracts.ExecutionPermissions.owner();
 		return assert.equal(response, owner, 'Failed to get expected owner');

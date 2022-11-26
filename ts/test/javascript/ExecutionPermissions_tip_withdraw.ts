@@ -11,11 +11,10 @@ import { Extended_Types } from '../../../@types/index';
 import { IExecutionPermissionsInstance } from '../../../@types/truffle-v5/';
 
 //
-contract('ExecutionPermissions.tip and ExecutionPermissions.withdraw', (accounts) => {
+contract('ExecutionPermissions.tip and ExecutionPermissions.withdraw -- Success', (accounts) => {
 	const owner = accounts[0];
 	const tipper = accounts[1];
 	const recipient = accounts[2];
-	const bad_actor = accounts.at(-1);
 
 	const contracts = {} as {
 		ExecutionPermissions: IExecutionPermissionsInstance;
@@ -127,6 +126,31 @@ contract('ExecutionPermissions.tip and ExecutionPermissions.withdraw', (accounts
 			//   "Failed to increase recipient balance"
 			// );
 		}
+	});
+});
+
+//
+contract('ExecutionPermissions.withdraw -- Error', (accounts) => {
+	const owner = accounts[0];
+	const tipper = accounts[1];
+	const recipient = accounts[2];
+	const bad_actor = accounts.at(-1);
+
+	const contracts = {} as {
+		ExecutionPermissions: IExecutionPermissionsInstance;
+	};
+
+	let snapshot_id: JsonRpcResponse['id'];
+
+	//
+	beforeEach(async () => {
+		snapshot_id = ((await takeSnapShot()) as JsonRpcResponse).result;
+		contracts.ExecutionPermissions = await ExecutionPermissions.deployed();
+	});
+
+	//
+	afterEach(async () => {
+		await revertToSnapShot(snapshot_id);
 	});
 
 	//

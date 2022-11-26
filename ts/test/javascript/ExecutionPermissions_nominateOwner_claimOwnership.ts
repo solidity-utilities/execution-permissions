@@ -16,10 +16,9 @@ type Storage_Stub = {
 };
 
 //
-contract('ExecutionPermissions.tip and ExecutionPermissions.withdraw', (accounts) => {
+contract('ExecutionPermissions.tip and ExecutionPermissions.withdraw -- Success', (accounts) => {
 	const owner = accounts[0];
 	const nominated_owner = accounts[1];
-	const bad_actor = accounts.at(-1);
 	const zero_address = `0x${'0'.repeat(40)}`;
 
 	const contracts = {} as {
@@ -78,6 +77,70 @@ contract('ExecutionPermissions.tip and ExecutionPermissions.withdraw', (accounts
 			nominated_owner,
 			'Failed to set `.nominated_owner`'
 		);
+	});
+
+	//
+	it('`.claimOwnership` -- Allowed from nominated account', async () => {
+		const storage = {
+			before: {
+				nominated_owner: undefined,
+				owner: undefined,
+			},
+			after: {
+				nominated_owner: undefined,
+				owner: undefined,
+			},
+		} as {
+			before: Storage_Stub;
+			after: Storage_Stub;
+		};
+
+		storage.before.owner = await contracts.ExecutionPermissions.owner();
+		storage.before.nominated_owner = await contracts.ExecutionPermissions.nominated_owner();
+
+		// console.log('#> Nominate new owner');
+		{
+			const tx_options = { from: owner };
+			await contracts.ExecutionPermissions.nominateOwner(nominated_owner, tx_options);
+		}
+
+		// console.log('#> Attempt to claim ownership');
+		{
+			const tx_options = { from: nominated_owner };
+			await contracts.ExecutionPermissions.claimOwnership(tx_options);
+		}
+
+		storage.after.owner = await contracts.ExecutionPermissions.owner();
+		storage.after.nominated_owner = await contracts.ExecutionPermissions.nominated_owner();
+
+		assert.notEqual(storage.before.owner, storage.after.owner, 'Failed to change `.owner`');
+
+		assert.equal(storage.after.owner, nominated_owner, 'Failed to set `.owner`');
+	});
+});
+
+//
+contract('ExecutionPermissions.tip and ExecutionPermissions.withdraw -- Error', (accounts) => {
+	const owner = accounts[0];
+	const nominated_owner = accounts[1];
+	const bad_actor = accounts.at(-1);
+	const zero_address = `0x${'0'.repeat(40)}`;
+
+	const contracts = {} as {
+		ExecutionPermissions: IExecutionPermissionsInstance;
+	};
+
+	let snapshot_id: JsonRpcResponse['id'];
+
+	//
+	beforeEach(async () => {
+		snapshot_id = ((await takeSnapShot()) as JsonRpcResponse).result;
+		contracts.ExecutionPermissions = await ExecutionPermissions.deployed();
+	});
+
+	//
+	afterEach(async () => {
+		await revertToSnapShot(snapshot_id);
 	});
 
 	//
@@ -196,44 +259,5 @@ contract('ExecutionPermissions.tip and ExecutionPermissions.withdraw', (accounts
 		);
 
 		assert.equal(caught_error, true, 'Failed to catch any error');
-	});
-
-	//
-	it('`.claimOwnership` -- Allowed from nominated account', async () => {
-		const storage = {
-			before: {
-				nominated_owner: undefined,
-				owner: undefined,
-			},
-			after: {
-				nominated_owner: undefined,
-				owner: undefined,
-			},
-		} as {
-			before: Storage_Stub;
-			after: Storage_Stub;
-		};
-
-		storage.before.owner = await contracts.ExecutionPermissions.owner();
-		storage.before.nominated_owner = await contracts.ExecutionPermissions.nominated_owner();
-
-		// console.log('#> Nominate new owner');
-		{
-			const tx_options = { from: owner };
-			await contracts.ExecutionPermissions.nominateOwner(nominated_owner, tx_options);
-		}
-
-		// console.log('#> Attempt to claim ownership');
-		{
-			const tx_options = { from: nominated_owner };
-			await contracts.ExecutionPermissions.claimOwnership(tx_options);
-		}
-
-		storage.after.owner = await contracts.ExecutionPermissions.owner();
-		storage.after.nominated_owner = await contracts.ExecutionPermissions.nominated_owner();
-
-		assert.notEqual(storage.before.owner, storage.after.owner, 'Failed to change `.owner`');
-
-		assert.equal(storage.after.owner, nominated_owner, 'Failed to set `.owner`');
 	});
 });
