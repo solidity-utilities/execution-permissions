@@ -200,6 +200,11 @@ contract ExecutionPermissions is
             "ExecutionPermissions: new owner cannot be zero address"
         );
 
+        require(
+            nominated_owner == msg.sender,
+            "ExecutionPermissions: sender not nominated"
+        );
+
         address previousOwner = owner;
         owner = msg.sender;
         emit OwnershipClaimed(previousOwner, msg.sender);
