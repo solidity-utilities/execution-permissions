@@ -11,7 +11,7 @@ import { Extended_Types } from '../../../@types/index';
 import { IExecutionPermissionsInstance } from '../../../@types/truffle-v5/';
 
 //
-contract('ExecutionPermissions.tip and ExecutionPermissions.withdraw -- Success', (accounts) => {
+contract('ExecutionPermissions.{tip,withdraw} -- Success', (accounts) => {
 	const owner = accounts[0];
 	const tipper = accounts[1];
 	const recipient = accounts[2];

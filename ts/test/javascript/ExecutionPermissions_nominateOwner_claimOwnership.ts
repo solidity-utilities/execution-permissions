@@ -16,7 +16,7 @@ type Storage_Stub = {
 };
 
 //
-contract('ExecutionPermissions.tip and ExecutionPermissions.withdraw -- Success', (accounts) => {
+contract('ExecutionPermissions.{nominateOwner,claimOwnership} -- Success', (accounts) => {
 	const owner = accounts[0];
 	const nominated_owner = accounts[1];
 	const zero_address = `0x${'0'.repeat(40)}`;
@@ -120,7 +120,7 @@ contract('ExecutionPermissions.tip and ExecutionPermissions.withdraw -- Success'
 });
 
 //
-contract('ExecutionPermissions.tip and ExecutionPermissions.withdraw -- Error', (accounts) => {
+contract('ExecutionPermissions.{nominateOwner,claimOwnership} -- Error', (accounts) => {
 	const owner = accounts[0];
 	const nominated_owner = accounts[1];
 	const bad_actor = accounts.at(-1);
@@ -255,6 +255,128 @@ contract('ExecutionPermissions.tip and ExecutionPermissions.withdraw -- Error', 
 		assert.notEqual(
 			storage.after.nominated_owner,
 			nominated_owner,
+			'Unexpected mutation of `.nominated_owner`'
+		);
+
+		assert.equal(caught_error, true, 'Failed to catch any error');
+	});
+
+	//
+	it('`.claimOwnership` -- Rejects zero address', async () => {
+		const expected = 'ExecutionPermissions: new owner cannot be zero address';
+
+		const storage = {
+			before: {
+				nominated_owner: undefined,
+				owner: undefined,
+			},
+			after: {
+				nominated_owner: undefined,
+				owner: undefined,
+			},
+		} as {
+			before: Storage_Stub;
+			after: Storage_Stub;
+		};
+
+		storage.before.owner = await contracts.ExecutionPermissions.owner();
+		storage.before.nominated_owner = await contracts.ExecutionPermissions.nominated_owner();
+
+		let caught_error;
+		try {
+			const tx_options = { from: bad_actor };
+
+			await contracts.ExecutionPermissions.claimOwnership(tx_options);
+		} catch (revert) {
+			if ((revert as Extended_Types.Truffle.Revert).reason !== expected) {
+				console.error(revert);
+			}
+
+			assert.equal(
+				(revert as Extended_Types.Truffle.Revert).reason,
+				expected,
+				'Failed to catch expected `revert.reason`'
+			);
+			caught_error = true;
+		}
+
+		storage.after.owner = await contracts.ExecutionPermissions.owner();
+		storage.after.nominated_owner = await contracts.ExecutionPermissions.nominated_owner();
+
+		assert.equal(
+			storage.before.nominated_owner,
+			storage.after.nominated_owner,
+			'Unexpected mutation of `.nominated_owner`'
+		);
+
+		assert.equal(storage.before.owner, storage.after.owner, 'Unexpected mutation of `.owner`');
+
+		assert.notEqual(
+			storage.after.nominated_owner,
+			nominated_owner,
+			'Unexpected mutation of `.nominated_owner`'
+		);
+
+		assert.equal(caught_error, true, 'Failed to catch any error');
+	});
+
+	//
+	it('`.claimOwnership` -- Rejects non-nominated sender', async () => {
+		const expected = 'ExecutionPermissions: sender not nominated';
+
+		const storage = {
+			before: {
+				nominated_owner: undefined,
+				owner: undefined,
+			},
+			after: {
+				nominated_owner: undefined,
+				owner: undefined,
+			},
+		} as {
+			before: Storage_Stub;
+			after: Storage_Stub;
+		};
+
+		storage.before.owner = await contracts.ExecutionPermissions.owner();
+		storage.before.nominated_owner = await contracts.ExecutionPermissions.nominated_owner();
+
+		const tx_options = { from: owner };
+
+		await contracts.ExecutionPermissions.nominateOwner(nominated_owner, tx_options);
+
+		let caught_error;
+		try {
+			const tx_options = { from: bad_actor };
+
+			await contracts.ExecutionPermissions.claimOwnership(tx_options);
+		} catch (revert) {
+			if ((revert as Extended_Types.Truffle.Revert).reason !== expected) {
+				console.error(revert);
+			}
+
+			assert.equal(
+				(revert as Extended_Types.Truffle.Revert).reason,
+				expected,
+				'Failed to catch expected `revert.reason`'
+			);
+			caught_error = true;
+		}
+
+		storage.after.owner = await contracts.ExecutionPermissions.owner();
+		storage.after.nominated_owner = await contracts.ExecutionPermissions.nominated_owner();
+
+		assert.equal(
+			nominated_owner,
+			storage.after.nominated_owner,
+			'Unexpected mutation of `.nominated_owner`'
+		);
+
+		assert.equal(storage.before.owner, storage.after.owner, 'Unexpected mutation of `.owner`');
+
+		assert.notEqual(
+			storage.before.nominated_owner,
+			storage.after.nominated_owner,
 			'Unexpected mutation of `.nominated_owner`'
 		);
 
