@@ -61,6 +61,13 @@ if printf -- '%s\0' "${_staged_paths[@]}" | grep -qEz -- '^contracts/'; then
 fi
 
 ##
+# Commands to run when 'test/solidity' scripts change
+if printf -- '%s\0' "${_staged_paths[@]}" | grep -qEz -- '^test/solidity/'; then
+	__debug__ 'Detected changes in -> ts'
+	_command_list__to_run['npm test']+=1
+fi
+
+##
 # Commands to run when 'ts' scripts change
 if printf -- '%s\0' "${_staged_paths[@]}" | grep -qEz -- '^ts/'; then
 	__debug__ 'Detected changes in -> ts'
