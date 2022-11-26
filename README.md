@@ -35,13 +35,14 @@ Utility contract for setting/enforcing execution permissions per function
 
     - [Storage `permissions(address,bytes4,address)`][heading__storage_permissionsaddressbytes4address]
     - [Storage `registered(address)`][heading__storage_registeredaddress]
+    - [Storage `owner()`][heading__storage_owner]
+    - [Storage `nominated_owner()`][heading__storage_nominated_owner]
 
 - [&#x1F5D2; Notes][heading__notes]
 
 - [:chart_with_upwards_trend: Contributing][heading__contributing]
   - [:trident: Forking][heading__forking]
   - [:currency_exchange: Sponsor][heading__sponsor]
-
 
 - [:card_index: Attribution][heading__attribution]
 
@@ -246,7 +247,8 @@ contract ExampleUsage is Ownable {
 ```
 
 
-> Tip; review the `test/` sub-directory for extensive usage examples
+> Tip; review the `ts/test`, and `test/solidity`, sub-directories for extensive
+> usage examples
 
 
 ______
@@ -498,6 +500,59 @@ transaction fees of multiple `setTargetPermission(bytes4,address,bool)` calls
 - `amount` **{uint256}** Measured in Wei
 
 
+**Throws** -> **{Error}** `"ExecutionPermissions: caller not owner"`
+**Throws** -> **{Error}** `"ExecutionPermissions: transfer failed"`
+
+
+---
+
+
+#### Method `nominateOwner(address)`
+[heading__method_nominateowneraddress]:
+  #method-nominateowneraddress
+  "Initiate transfer of contract ownership"
+
+
+> Initiate transfer of contract ownership
+
+
+**Source**
+
+- [`contracts/ExecutionPermissions.sol` -- `nominateOwner(address)`][source__contracts__executionpermissions_sol__nominateOwner__address]
+- [`contracts/interfaces/IExecutionPermissions.sol` -- `nominateOwner(address)`][source__contracts__iexecutionpermissions_sol__nominateOwner__address]
+
+
+**Parameters**
+
+- `newOwner` **{address}** Account that may claim ownership of contract
+
+
+**Throws** -> **{Error}** `"ExecutionPermissions: caller not owner"`
+**Throws** -> **{Error}** `"ExecutionPermissions: new owner cannot be zero address"`
+
+
+---
+
+
+#### Method `claimOwnership`
+[heading__method_claimownership]:
+  #method-claimownership
+  "Accept transfer of contract ownership"
+
+
+> Accept transfer of contract ownership
+
+
+**Source**
+
+- [`contracts/ExecutionPermissions.sol` -- `claimOwnership()`][source__contracts__executionpermissions_sol__claimOwnership]
+- [`contracts/interfaces/IExecutionPermissions.sol` -- `claimOwnership()`][source__contracts__iexecutionpermissions_sol__claimOwnership]
+
+
+**Throws** -> **{Error}** `"ExecutionPermissions: new owner cannot be zero address"`
+**Throws** -> **{Error}** `"ExecutionPermissions: sender not nominated"`
+
+
 ---
 
 
@@ -547,6 +602,48 @@ transaction fees of multiple `setTargetPermission(bytes4,address,bool)` calls
 
 
 **Returns** -> **{boolean}** State of `ref` registration
+
+
+---
+
+
+#### Storage `owner()`
+[heading__storage_owner]:
+  #storage-owner
+  "Obtain current owner address"
+
+
+> Obtain current owner address
+
+
+**Source**
+
+- [`contracts/ExecutionPermissions.sol` -- `owner()`][source__contracts__executionpermissions_sol__owner]
+- [`contracts/interfaces/IExecutionPermissions.sol` -- `owner()`][source__contracts__iexecutionpermissions_sol__owner]
+
+
+**Returns** -> **{address}** Current owner of contract instance
+
+
+---
+
+
+#### Storage `nominated_owner()`
+[heading__storage_nominated_owner]:
+  #storage-nominated_owner
+  "Obtain new owner nominated address"
+
+
+> Obtain new owner nominated address
+
+
+**Source**
+
+- [`contracts/ExecutionPermissions.sol` -- `nominated_owner()`][source__contracts__executionpermissions_sol__nominated_owner]
+- [`contracts/interfaces/IExecutionPermissions.sol` -- `nominated_owner()`][source__contracts__iexecutionpermissions_sol__nominated_owner]
+
+
+**Returns** -> **{address}** Last nominated address of new contract instance owner
 
 
 ______
@@ -829,19 +926,56 @@ For further details review full length version of [AGPL-3.0][branch__current__li
   "Allow owner of `ExecutionPermissions` to receive tips"
 
 
+[source__contracts__executionpermissions_sol__nominateOwner__address]:
+  contracts/ExecutionPermissions.sol#L189
+  "Initiate transfer of contract ownership"
+
+[source__contracts__iexecutionpermissions_sol__nominateOwner__address]:
+  contracts/interfaces/IExecutionPermissions.sol#L386
+  "Initiate transfer of contract ownership"
+
+
+[source__contracts__executionpermissions_sol__claimOwnership]:
+  contracts/ExecutionPermissions.sol#L208
+  "Accept transfer of contract ownership"
+
+[source__contracts__iexecutionpermissions_sol__claimOwnership]:
+  contracts/interfaces/IExecutionPermissions.sol#L419
+  "Accept transfer of contract ownership"
+
+
 [source__contracts__executionpermissions_sol__permissions__address_bytes4_address]:
   contracts/ExecutionPermissions.sol#L21
-  "Check execution permissions of referenced contract function for given caller"
+  "Map contract to function target to caller to permission"
 
 [source__contracts__iexecutionpermissions_sol__permissions__address_bytes4_address]:
-  contracts/interfaces/IExecutionPermissions.sol#L449
+  contracts/interfaces/IExecutionPermissions.sol#L453
   "Check execution permissions of referenced contract function for given caller"
 
 
 [source__contracts__executionpermissions_sol__registered__address_bool]:
   contracts/ExecutionPermissions.sol#L26
-  "Check registration status of referenced contract"
+  "Map contract to registered state"
 
 [source__contracts__iexecutionpermissions_sol__registered__address_bool]:
-  contracts/interfaces/IExecutionPermissions.sol#L490
+  contracts/interfaces/IExecutionPermissions.sol#L494
   "Check registration status of referenced contract"
+
+
+[source__contracts__executionpermissions_sol__owner]:
+  contracts/ExecutionPermissions.sol#L30
+  "Store current owner of this contract instance"
+
+[source__contracts__iexecutionpermissions_sol__owner]:
+  contracts/interfaces/IExecutionPermissions.sol#L524
+  "Obtain current owner address"
+
+
+[source__contracts__executionpermissions_sol__nominated_owner]:
+  contracts/ExecutionPermissions.sol#L34
+  "Store address of possible new owner of this contract instance"
+
+[source__contracts__iexecutionpermissions_sol__nominated_owner]:
+  contracts/interfaces/IExecutionPermissions.sol#L540
+  "Obtain new owner nominated address"
+
