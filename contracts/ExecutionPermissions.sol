@@ -12,6 +12,8 @@ import { IOwnable } from "./interfaces/IOwnable.sol";
 
 /// @title Utility contract for setting/enforcing execution permissions per function
 /// @author S0AndS0
+/// @custom:link https://github.com/solidity-utilities/execution-permissions
+/// @dev See {IExecutionPermissions}
 contract ExecutionPermissions is
     IExecutionPermissions_Events,
     IExecutionPermissions_Functions
@@ -61,6 +63,7 @@ contract ExecutionPermissions is
     /*************************************************************************/
 
     /// @dev See {IExecutionPermissions_Functions-isPermitted}
+    /// @inheritdoc IExecutionPermissions_Functions
     function isPermitted(bytes4 target, address caller)
         external
         view
@@ -73,6 +76,7 @@ contract ExecutionPermissions is
     }
 
     /// @dev See {IExecutionPermissions_Functions-isPermitted}
+    /// @inheritdoc IExecutionPermissions_Functions
     function isPermitted(string memory target, address caller)
         external
         view
@@ -90,6 +94,7 @@ contract ExecutionPermissions is
     /*************************************************************************/
 
     /// @dev See {IExecutionPermissions_Functions-setBatchPermission}
+    /// @inheritdoc IExecutionPermissions_Functions
     function setBatchPermission(BatchPermissionEntry[] memory entries)
         external
         payable
@@ -110,6 +115,7 @@ contract ExecutionPermissions is
     }
 
     /// @dev See {IExecutionPermissions_Functions-setTargetPermission}
+    /// @inheritdoc IExecutionPermissions_Functions
     function setTargetPermission(
         bytes4 target,
         address caller,
@@ -119,6 +125,7 @@ contract ExecutionPermissions is
     }
 
     /// @dev See {IExecutionPermissions_Functions-setRegistered}
+    /// @inheritdoc IExecutionPermissions_Functions
     function setRegistered(bool state) external payable virtual override {
         require(
             msg.sender.code.length > 0,
@@ -129,6 +136,7 @@ contract ExecutionPermissions is
     }
 
     /// @dev See {IExecutionPermissions_Functions-setRegistered}
+    /// @inheritdoc IExecutionPermissions_Functions
     function setRegistered(address ref, bool state)
         external
         payable
@@ -158,6 +166,7 @@ contract ExecutionPermissions is
     }
 
     /// @dev See {IExecutionPermissions_Functions-tip}
+    /// @inheritdoc IExecutionPermissions_Functions
     function tip() external payable virtual override {}
 
     /*************************************************************************/
@@ -165,6 +174,7 @@ contract ExecutionPermissions is
     /*************************************************************************/
 
     /// @dev See {IExecutionPermissions_Functions-withdraw}
+    /// @inheritdoc IExecutionPermissions_Functions
     function withdraw(address to, uint256 amount)
         external
         payable
@@ -177,6 +187,8 @@ contract ExecutionPermissions is
     }
 
     /// @dev See {IExecutionPermissions_Functions-nominateOwner}
+    /// @dev See {IExecutionPermissions_Events-OwnerNominated}
+    /// @inheritdoc IExecutionPermissions_Functions
     function nominateOwner(address newOwner)
         external
         payable
@@ -194,6 +206,8 @@ contract ExecutionPermissions is
     }
 
     /// @dev See {IExecutionPermissions_Functions-claimOwnership}
+    /// @dev See {IExecutionPermissions_Events-OwnershipClaimed}
+    /// @inheritdoc IExecutionPermissions_Functions
     function claimOwnership() external payable virtual override {
         require(
             nominated_owner != address(0),

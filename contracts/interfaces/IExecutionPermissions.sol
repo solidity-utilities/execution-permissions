@@ -10,7 +10,7 @@ struct BatchPermissionEntry {
     bool state;
 }
 
-/// @title Describe available functions
+/// @title Describe events contract may produce
 /// @dev See {IExecutionPermissions}
 interface IExecutionPermissions_Events {
     /// Log attempt to transfer ownership of contract instance
@@ -291,6 +291,28 @@ interface IExecutionPermissions_Functions {
     /// @custom:throws "ExecutionPermissions: instance not initialized"
     /// @custom:throws "ExecutionPermissions: instance does not implement `.owner()`"
     /// @custom:throws "ExecutionPermissions: not instance owner"
+    ///
+    /// @dev See {IExecutionPermissions}
+    ///
+    /// @custom:examples
+    ///
+    /// ### Node Web3JS set state for owned contract
+    ///
+    /// ```javascript
+    /// const { PRIVATE_KEY } = process.env;
+    ///
+    /// if (PRIVATE_KEY) {
+    ///   const account = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
+    ///
+    ///   ExecutionPermissions
+    ///     .methods
+    ///     .setRegistered("0x0...DEADBEEF", true)
+    ///     .send({ from: account.address })
+    ///     .then((receipt) => {
+    ///       console.log("tip ->", JSON.stringify({ receipt }, null, 2));
+    ///     });
+    /// }
+    /// ```
     function setRegistered(address ref, bool state) external payable;
 
     /// Show some support developers of this contract
@@ -495,13 +517,42 @@ interface IExecutionPermissions_Variables {
     /// ```
     function registered(address ref) external view returns (bool);
 
+    /// Obtain current owner address
+    ///
+    /// @dev See {IExecutionPermissions}
+    ///
+    /// @custom:examples
+    ///
+    /// ### Web3JS check what address owns contract instance
+    ///
+    /// ```javascript
+    /// ExecutionPermissions.methods.owner().then((response) => {
+    ///   console.assert(typeof response === "string", "Unexpected response type");
+    ///   console.log("owner ->", { response });
+    /// })
+    /// ```
     function owner() external view returns (address);
 
+    /// Obtain new owner nominated address
+    ///
+    /// @dev See {IExecutionPermissions}
+    ///
+    /// @custom:examples
+    ///
+    /// ### Web3JS check what address is nominated to own contract
+    ///
+    /// ```javascript
+    /// ExecutionPermissions.methods.nominated_owner().then((response) => {
+    ///   console.assert(typeof response === "string", "Unexpected response type");
+    ///   console.log("nominated_owner ->", { response });
+    /// })
+    /// ```
     function nominated_owner() external view returns (address);
 }
 
 /// @title Describe all functions available to third-parties
 /// @author S0AndS0
+/// @custom:link https://github.com/solidity-utilities/execution-permissions
 ///
 /// @custom:examples
 ///
