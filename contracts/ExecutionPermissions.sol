@@ -25,10 +25,12 @@ contract ExecutionPermissions is
     /// @dev See {IExecutionPermissions_Variables-registered}
     mapping(address => bool) public registered;
 
-    ///
+    /// Store current owner of this contract instance
+    /// @dev See {IExecutionPermissions_Variables-owner}
     address public owner;
 
-    ///
+    /// Store address of possible new owner of this contract instance
+    /// @dev See {IExecutionPermissions_Variables-nominated_owner}
     address public nominated_owner;
 
     ///

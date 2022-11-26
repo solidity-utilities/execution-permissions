@@ -407,6 +407,10 @@ interface IExecutionPermissions_Variables {
     /// });
     /// ```
     function registered(address ref) external view returns (bool);
+
+    function owner() external view returns (address);
+
+    function nominated_owner() external view returns (address);
 }
 
 /// @title Describe all functions available to third-parties
