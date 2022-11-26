@@ -5,12 +5,12 @@
   "main": "null",
   "type": "commonjs",
   "scripts": {
-    "compile": "truffle compile",
     "ganache": "ganache",
     "prepare": "husky install",
     "postinstall": "postinstall",
-    "size": "truffle run contract-size",
     "test": "truffle test",
+    "truffle:compile": "truffle compile",
+    "truffle:size": "truffle run contract-size",
     "typechain:all": "npm run typechain:ethers && npm run typechain:truffle && npm run typechain:web3",
     "typechain:ethers": "npm run typechain:ethers-v5",
     "typechain:ethers-v5": "typechain --target ethers-v5 --out-dir @types/ethers-v5 build/contracts/*.json",
@@ -18,8 +18,8 @@
     "typechain:truffle-v5": "typechain --target truffle-v5 --out-dir @types/truffle-v5 build/contracts/*.json",
     "typechain:web3": "npm run typechain:web3-v1",
     "typechain:web3-v1": "typechain --target web3-v1 --out-dir @types/web3-v1 build/contracts/*.json",
-    "ts-build": "tsc --build",
-    "ts-watch": "tsc --watch"
+    "ts:build": "tsc --build",
+    "ts:watch": "tsc --watch"
   },
   "repository": {
     "type": "git",

@@ -29,9 +29,9 @@ fi
 ##
 # Note: order is important!
 _command_list__available=(
-	'npm run compile'
+	'npm run truffle:compile'
 	'npm run typechain:all'
-	'npm run ts-build'
+	'npm run ts:build'
 	'npm test'
 )
 
@@ -47,7 +47,7 @@ done
 # Commands to run when '@types' hints change
 if printf -- '%s\0' "${_staged_paths[@]}" | grep -qEz -- '^@types/'; then
 	__debug__ 'Detected changes in -> @types'
-	_command_list__to_run['npm run ts-build']+=1
+	_command_list__to_run['npm run ts:build']+=1
 	_command_list__to_run['npm test']+=1
 fi
 
@@ -55,7 +55,7 @@ fi
 # Commands to run when 'contracts' change
 if printf -- '%s\0' "${_staged_paths[@]}" | grep -qEz -- '^contracts/'; then
 	__debug__ 'Detected changes in -> contracts'
-	_command_list__to_run['npm run compile']+=1
+	_command_list__to_run['npm run truffle:compile']+=1
 	_command_list__to_run['npm run typechain:all']+=1
 	_command_list__to_run['npm test']+=1
 fi
@@ -64,7 +64,7 @@ fi
 # Commands to run when 'ts' scripts change
 if printf -- '%s\0' "${_staged_paths[@]}" | grep -qEz -- '^ts/'; then
 	__debug__ 'Detected changes in -> ts'
-	_command_list__to_run['npm run ts-build']+=1
+	_command_list__to_run['npm run ts:build']+=1
 	_command_list__to_run['npm test']+=1
 fi
 
