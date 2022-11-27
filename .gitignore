@@ -22,3 +22,9 @@ truffle-config.js
 
 ## Vim
 *.swp
+
+## Publishing
+.ethpm.json
+.env
+.env.*
+!.env.example
