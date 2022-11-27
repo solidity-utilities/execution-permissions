@@ -40,6 +40,9 @@
  * ```
  */
 
+import dotenv from 'dotenv';
+import { expand as dotenvExpand } from 'dotenv-expand';
+
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
@@ -47,10 +50,7 @@ import HDWalletProvider from '@truffle/hdwallet-provider';
 
 import { loadJsonFileSync } from './js-lib/loadJsonFile';
 
-const infura_project_id = '';
-
 const ethpm_file = `${path.join(os.homedir(), '.ethpm.json')}`;
-
 let ethpm: { private_keys?: string[] };
 if (fs.existsSync(ethpm_file)) {
 	try {
@@ -58,6 +58,14 @@ if (fs.existsSync(ethpm_file)) {
 	} catch (error) {
 		console.warn('Warning: ignored ->', (error as Error).message);
 	}
+}
+
+const { ENV_FILE = path.join(__dirname, '.env') } = process.env as {
+	[key: string]: unknown;
+	ENV_FILE?: string;
+};
+if (ENV_FILE?.length && fs.existsSync(ENV_FILE)) {
+	dotenvExpand(dotenv.config({ path: ENV_FILE }));
 }
 
 //
@@ -78,12 +86,39 @@ module.exports = {
 		// You should run a client (like ganache-cli, geth or parity) in a separate terminal
 		// tab if you use this network and you must also set the `host`, `port` and `network_id`
 		// options below to some value.
-		//
+
 		development: {
 			host: '127.0.0.1', // Localhost (default: none)
 			port: 8545, // Standard Ethereum port (default: none)
 			network_id: '*', // Any network (default: none)
 		},
+
+		ethereum: {
+			network_id: 1,
+			confirmations: 1,
+			timeoutBlocks: 100,
+			provider: () => {
+				const { INFURA_PROJECT_ID, PRIVATE_KEY } = process.env as {
+					[key: string]: unknown;
+					INFURA_PROJECT_ID?: string;
+					PRIVATE_KEY?: string;
+				};
+
+				if (!INFURA_PROJECT_ID) {
+					throw new Error('Missing `process.env.INFURA_PROJECT_ID`');
+				}
+
+				if (!PRIVATE_KEY) {
+					throw new Error('Missing `process.env.PRIVATE_KEY`');
+				}
+
+				return new HDWalletProvider({
+					privateKeys: [PRIVATE_KEY],
+					providerOrUrl: `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
+				});
+			},
+		},
+
 		// Another network with more advanced options...
 		// advanced: {
 		// port: 8777,             // Custom port
@@ -100,7 +135,7 @@ module.exports = {
 		//     if (!ethpm) {
 		//       throw new Error("Empty 'ethpm' file?");
 		//     }
-		//     if (!infura_project_id) {
+		//     if (!INFURA_PROJECT_ID) {
 		//       throw new Error("Project ID is required");
 		//     }
 		//     const valid_keys = ["mnemonic", "private_key", "private_keys"];
@@ -112,7 +147,7 @@ module.exports = {
 		//     }
 		//     return new HDWalletProvider(
 		//       auth_pair[1],
-		//       `https://ropsten.infura.io/v3/${infura_project_id}`
+		//       `https://ropsten.infura.io/v3/${INFURA_PROJECT_ID}`
 		//     );
 		//   },
 		//   network_id: 3, // Ropsten's id
@@ -192,5 +227,21 @@ module.exports = {
 	//   }
 	// }
 	// }
-	plugins: ['truffle-contract-size'],
+
+	api_keys: {
+		ehterscan: ((): string | undefined => {
+			const { ETHERSCAN_API_KEY } = process.env as {
+				[key: string]: unknown;
+				ETHERSCAN_API_KEY?: string;
+			};
+
+			if (!ETHERSCAN_API_KEY?.length) {
+				console.warn('Warning -- missing `process.env.ETHERSCAN_API_KEY`');
+			}
+
+			return ETHERSCAN_API_KEY;
+		})(),
+	},
+
+	plugins: ['truffle-contract-size', 'truffle-plugin-verify'],
 };
