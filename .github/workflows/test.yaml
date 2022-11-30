@@ -45,7 +45,7 @@ jobs:
         run: npm run truffle:compile
 
       - name: TypeChain build type hints
-        run: npm run typecain:all
+        run: npm run typechain:all
 
       - name: Run CI/CD tests
         run: npm test
