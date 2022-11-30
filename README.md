@@ -22,6 +22,9 @@ Utility contract for setting/enforcing execution permissions per function
 - [&#x1F9F0; Usage][heading__usage]
   - [`ExampleUsage` contract][heading__exampleusage_contract]
 
+- [Networks][heading__networks]
+  - [Ethereum Main][heading__ethereum_main]
+
 - [&#x1F523; API][heading__api]
   - [Contracts `ExecutionPermissions` and `IExecutionPermissions`][heading__contracts_executionpermissions_and_iexecutionpermissions]
     - [Method `isPermitted(bytes4,address)`][heading__method_ispermittedbytes4address]
@@ -249,6 +252,48 @@ contract ExampleUsage is Ownable {
 
 > Tip; review the `ts/test`, and `test/solidity`, sub-directories for extensive
 > usage examples
+
+
+______
+
+
+## Networks
+[heading__networks]:
+  #networks
+  "Anyone may utilize the contract on-chain via the following network addresses"
+
+
+> Anyone may utilize the contract on-chain via the following network addresses
+
+
+**`migrations/1000_ExampleUsage.js` (example)**
+
+```javascript
+'use strict';
+
+module.exports = (deployer, network, accounts) => {
+  const ExampleUsage = artifacts.require('ExampleUsage');
+
+  const parameters = {
+    permissionStore: '0x90f94E4Fa212Aafb4d9528c3A064815B3378c8b9',
+  };
+
+  deployer.deploy(ExampleUsage, ...Object.values(parameters));
+};
+```
+
+
+---
+
+
+### Ethereum Main
+[heading__ethereum_main]: #ethereum-main
+
+
+> Address: `0x90f94E4Fa212Aafb4d9528c3A064815B3378c8b9`
+
+- [Sourcify](https://sourcify.dev/#/lookup/0x90f94E4Fa212Aafb4d9528c3A064815B3378c8b9)
+- [Etherscan](https://etherscan.io/address/0x90f94E4Fa212Aafb4d9528c3A064815B3378c8b9#code)
 
 
 ______
