@@ -57,7 +57,7 @@
     "@types/chai": "^4.3.4",
     "@types/ethereum-protocol": "^1.0.2",
     "@types/mocha": "^10.0.0",
-    "@types/web3": "1.0.20",
+    "@types/web3": "1.2.2",
     "@types/web3-provider-engine": "^14.0.1",
     "dotenv": "^16.0.3",
     "dotenv-expand": "^9.0.0",
