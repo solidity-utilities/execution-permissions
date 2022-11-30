@@ -38,14 +38,14 @@ jobs:
       - name: Start Ganache as background service
         run: npm run ganache 1>/dev/null &
 
+      - name: TypeScirpt transpile to JavaScript
+        run: npm run ts:build
+
       - name: Compile smart contracts
         run: npm run truffle:compile
 
       - name: TypeChain build type hints
         run: npm run typecain:all
-
-      - name: TypeScirpt transpile to JavaScript
-        run: npm run ts:build
 
       - name: Run CI/CD tests
         run: npm test
