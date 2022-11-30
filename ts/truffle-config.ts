@@ -229,7 +229,7 @@ module.exports = {
 	// }
 
 	api_keys: {
-		ehterscan: ((): string | undefined => {
+		etherscan: ((): string | undefined => {
 			const { ETHERSCAN_API_KEY } = process.env as {
 				[key: string]: unknown;
 				ETHERSCAN_API_KEY?: string;
