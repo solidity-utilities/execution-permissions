@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts": "^4.7.3",
-    "@truffle/hdwallet-provider": "^2.1.2",
+    "@truffle/hdwallet-provider": "^2.1.4",
     "@typechain/ethers-v5": "^10.1.1",
     "@typechain/truffle-v5": "^8.0.2",
     "@typechain/web3-v1": "^6.0.2",
