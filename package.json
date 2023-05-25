@@ -53,7 +53,7 @@
     "@truffle/hdwallet-provider": "^2.1.9",
     "@typechain/ethers-v5": "^10.2.0",
     "@typechain/truffle-v5": "^8.0.2",
-    "@typechain/web3-v1": "^6.0.2",
+    "@typechain/web3-v1": "^6.0.3",
     "@types/chai": "^4.3.4",
     "@types/ethereum-protocol": "^1.0.2",
     "@types/mocha": "^10.0.1",
