@@ -65,7 +65,7 @@
     "ganache": "^7.7.6",
     "husky": "^8.0.3",
     "keyv": "^4.5.2",
-    "truffle": "^5.8.1",
+    "truffle": "^5.9.2",
     "truffle-contract-size": "^2.0.1",
     "truffle-plugin-verify": "^0.6.2",
     "typechain": "^8.1.1",
